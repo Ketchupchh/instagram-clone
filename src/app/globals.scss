@@ -1,0 +1,32 @@
+@use 'fonts';
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --main-background: var(--dark-background);
+
+    --dark-background: 18 18 18;
+    --black-background: 0 0 0;
+    --light-background: 255 255 255;
+  }
+
+  a,
+  input,
+  button,
+  textarea {
+    --webkit-tap-highlight-color: transparent;
+  }
+  
+  body {
+    @apply hover-animation bg-main-background font-roboto text-light-primary dark:text-dark-primary;
+  }
+
+  @layer components {
+    .hover-animation {
+      @apply transition-colors duration-200;
+    }
+  }
+}
