@@ -17,7 +17,6 @@ import { useWindow } from '@/lib/context/window-context';
 export default function Home() {
 
   const { user, signInWithGoogle } = useAuth();
-  const { isMobile } = useWindow();
 
   const { data: postData, loading: postLoading } = useCollection(
     query(
@@ -96,7 +95,7 @@ export default function Home() {
         <div className='flex flex-row items-center gap-x-5 w-full mb-5'>
           {user ? (
             <>
-              <UserAvatar src={user.photoURL} username={user.username} />
+              <UserAvatar className='w-14 h-14' src={user.photoURL} username={user.username} />
               <UserUsername username={user.username} userId={user.id} verified={user.verified} b size='text-[15px]'/>
               <button className='ml-auto text-[#0095f6] text-[12px]' onClick={signInWithGoogle}>
                 Switch

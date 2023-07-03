@@ -10,7 +10,7 @@ export default function CreateLayout({
   children: React.ReactNode
 }) {
   return (
-    <div className="flex flex-col items-center">
+    <div className="flex flex-col items-center w-screen min-h-screen">
       {children}
     </div>
   )

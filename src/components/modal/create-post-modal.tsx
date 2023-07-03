@@ -61,9 +61,7 @@ export function CreatePostModal({
 
         if(titleIndex - 1 === 0)
         {
-            setSelectedImages([]);
-            setImagesPreview([]);
-            URL.revokeObjectURL(imagesPreview[0].src)
+            cleanImage();
         }
     }
 
@@ -177,13 +175,6 @@ export function CreatePostModal({
         setImagesPreview([]);
     };
 
-    const discardTweet = (): void => {
-        setInputValue('');
-        cleanImage();
-
-        inputRef.current?.blur();
-    };
-
     const handleChange = ({
         target: { value }
     }: ChangeEvent<HTMLTextAreaElement>): void => setInputValue(value);
@@ -193,16 +184,11 @@ export function CreatePostModal({
         void sendPost();
     };
 
-    const formId = useId();
-
     const inputLimit = user?.isAdmin ? 560 : 280;
 
     const inputLength = inputValue.length;
-    const isValidInput = !!inputValue.trim().length;
-    const isCharLimitExceeded = inputLength > inputLimit;
-
-    const isValidTweet =
-    !isCharLimitExceeded && (isValidInput || isUploadingImages);
+    //const isValidInput = !!inputValue.trim().length;
+    //const isCharLimitExceeded = inputLength > inputLimit;
 
     const inputFileRef = useRef<HTMLInputElement>(null);
 

@@ -153,29 +153,6 @@ export default function Settings() {
     }: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
       setEditUserData({ ...editUserData, [key]: value });
 
-    const inputFields: Readonly<RequiredInputFieldProps[]> = [
-        {
-          label: 'Name',
-          inputId: 'name',
-          inputValue: editUserData.name,
-          inputLimit: 50,
-          errorMessage: "Error"
-        },
-        {
-          label: 'Website',
-          inputId: 'website',
-          inputValue: editUserData.website,
-          inputLimit: 100
-        },
-        {
-          label: 'Bio',
-          inputId: 'bio',
-          inputValue: editUserData.bio,
-          inputLimit: 160,
-          useTextArea: true
-        },
-    ];
-
     return (
         <div className="flex flex-row w-[60rem] h-[45rem] ml-40 border dark:border-neutral-700 dark:bg-black">
             <div className="flex flex-col w-56 border-r dark:border-neutral-700">

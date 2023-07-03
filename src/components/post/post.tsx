@@ -59,7 +59,7 @@ export function Post(post: PostProps) : JSX.Element
             </div>
             <Link
                 className="px-3 text-[12px] text-neutral-700 mt-1 mb-1"
-                href={`/post/${post.id}`}
+                href={`/p/${post.id}`}
             >
                 {post.userComments > 0 ? `View all ${post.userComments} comments` : `Be the first to comment`}
             </Link>

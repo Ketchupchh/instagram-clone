@@ -17,12 +17,13 @@ const blacklistedRoutes = [
     "/create"
 ]
 
+
 export function Sidebar() : JSX.Element
 {
     const pathname = usePathname();
     const router = useRouter();
     const { isMobile } = useWindow();
-    const { user, signInWithGoogle } = useAuth();
+    const { user, signInWithGoogle, signOut } = useAuth();
     const {
         open: createOpen,
         openModal: createOpenModal,
@@ -32,11 +33,16 @@ export function Sidebar() : JSX.Element
     const isBlacklistedRoute = blacklistedRoutes.includes(pathname);
 
     useEffect(() => {
-        if(!isMobile) router.replace('/');
-    }, [isMobile, router]);
+        if(!isMobile && isBlacklistedRoute) router.replace('/');
+    }, [isMobile, router, isBlacklistedRoute]);
 
     const photoURL = user ? user.photoURL : "/Ketchup";
     const username = user ? user.username : "Ketchup";
+
+    const handleCreateClick = () => {
+        if(isMobile) router.push('/create');
+        else createOpenModal();
+    }
 
     return (
         <>
@@ -52,22 +58,24 @@ export function Sidebar() : JSX.Element
                     </Modal>
                     <div className="fixed top-0 flex xs:hidden flex-row gap-x-5 items-center bg-white dark:bg-black w-full h-20 border-b dark:border-neutral-800 z-50 px-5">
                         <Link className="flex flex-row items-center gap-x-2" href="/">
-                            <CustomIcon className="w-24 h-24" iconName='InstagramTextLogo' />
+                            <CustomIcon className="w-24 h-24 dark:text-white text-black" iconName='InstagramTextLogo' />
                             <CustomIcon iconName='ArrowDownIcon' />
                         </Link>
 
                         <search className="flex flex-row ml-auto items-center gap-x-2 bg-black/10 dark:bg-neutral-800 rounded-lg p-2">
-                            <CustomIcon className="dark:text-neutral-500 w-6 h-6" iconName='MagnifyingGlass' />
+                            <CustomIcon className="dark:text-neutral-500 w-6 h-6 " iconName='MagnifyingGlass' />
                             <input
                                 className="bg-transparent outline-none"
                                 type="search"
                             />
                         </search>
 
-                        <CustomIcon className="w-6 h-6" iconName='HeartIcon' />
+                        <button onClick={signOut}>
+                            <CustomIcon className="w-6 h-6 dark:text-white text-black" iconName='HeartIcon' />
+                        </button>
                     </div>
                     <div className='fixed bottom-0 min-h-[50px] w-full justify-around flex-row p-1 flex border-t dark:border-neutral-800
-                                    xs:border-r xs:flex-col xs:gap-y-2 xs:p-0 xl:p-6 xs:pt-10 dark:bg-black xl:w-[15.3rem]
+                                    dark:bg-black bg-white xs:border-r xs:flex-col xs:gap-y-2 xs:p-0 xl:p-6 xs:pt-10 xl:w-[15.3rem]
                                     xs:left-0 xs:w-[4rem] xs:min-h-screen xs:border-t-0 z-10'
                     >
                         <Link className="hidden xs:flex xs:justify-center xl:justify-normal items-center xs:w-10 xs:h-10 xl:w-full xl:full xs:p-1 xl:p-0 rounded-full mb-8 xs:mt-5 xl:mt-4 xs:ml-3 xl:ml-0 hover-animation xs:dark:hover:bg-neutral-600/20 xl:dark:hover:bg-transparent" href={`/`}>
@@ -135,7 +143,9 @@ export function Sidebar() : JSX.Element
                             </motion.div>
                             <p className="hidden xs:hidden xl:block">Notifications</p>
                         </button>
-                        <button className="hover-animation xl:-ml-3 xs:justify-center xl:justify-normal xs:w-10 xs:h-10 xl:w-full xl:h-full xs:ml-3 xs:p-2 xl:p-3 flex flex-row items-center gap-x-5 font-bold xs:dark:hover:bg-neutral-600/20 rounded-full text-left" onClick={createOpenModal}>
+                        <button
+                            className="hover-animation xl:-ml-3 xs:justify-center xl:justify-normal xs:w-10 xs:h-10 xl:w-full xl:h-full xs:ml-3 xs:p-2 xl:p-3 flex flex-row items-center gap-x-5 font-bold xs:dark:hover:bg-neutral-600/20 rounded-full text-left"
+                            onClick={handleCreateClick}>
                             <motion.div
                                 whileHover={{
                                     scale: 1.05
