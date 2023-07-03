@@ -33,7 +33,6 @@ export function PostActions(post: PostActionsProps) : JSX.Element
                 )}
             >
                 <CustomIcon className={postIsLiked ? "text-red-600 w-6 h-6" : "dark:text-white text-black w-6 h-6"} iconName={postIsLiked ? "SolidHeartIcon" : "HeartIcon"}  />
-                {post.userLikes.length > 0 && <p className="font-bold">{post.userLikes.length}</p>}
             </button>
             <button className="w-6 h-6" onClick={post.openPostModal}>
                 <CustomIcon iconName="MessageIcon" />

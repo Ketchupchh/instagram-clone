@@ -21,7 +21,7 @@
   }
   
   body {
-    @apply hover-animation bg-main-background font-roboto text-light-primary dark:text-dark-primary;
+    @apply hover-animation dark:bg-black bg-white xs:dark:bg-main-background xs:bg-main-background font-roboto text-light-primary dark:text-dark-primary;
   }
 
   @layer components {

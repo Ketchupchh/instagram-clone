@@ -89,7 +89,22 @@ export default function UserProfile() : JSX.Element
                                     )}
                                 </div>
 
-                                <div className="flex flex-col items-center border-t dark:border-neutral-800 mt-5">
+                                <div className='xs:hidden flex flex-row justify-around items-center w-full py-2 border-t dark:border-neutral-800'>
+                                    <div className='flex flex-col items-center'>
+                                        <p className='font-bold'>{user.totalPosts}</p>
+                                        <p className='text-[14px] dark:text-neutral-400'>{user.totalPosts > 1 ? "posts" : "post"}</p>
+                                    </div>
+                                    <div className='flex flex-col items-center'>
+                                        <p className='font-bold'>{user.followers.length}</p>
+                                        <p className='text-[14px] dark:text-neutral-400'>{user.followers.length > 1 ? "followers" : "follower"}</p>
+                                    </div>
+                                    <div className='flex flex-col items-center'>
+                                        <p className='font-bold'>{user.following.length}</p>
+                                        <p className='text-[14px] dark:text-neutral-400'>following</p>
+                                    </div>
+                                </div>
+
+                                <div className="flex flex-col items-center border-b xs:border-b-0 xs:border-t dark:border-neutral-800 xs:mt-5">
                                     {isMobile ? (
                                         <div className="flex flex-row justify-around w-full border-t dark:border-neutral-800">
                                             <Link className="focus:border-t-2 w-full flex justify-center p-2" href={`/user/${user.username}`}><CustomIcon iconName='GridIcon' /></Link>
@@ -131,7 +146,7 @@ export default function UserProfile() : JSX.Element
                     <p className='px-5'>The link you followed may be broken, or the page may have been removed. Go back to <button onClick={back}>Instagram.</button></p>
                 </>
             )}
-            <div className="w-full">
+            <div className="hidden xs:block w-full">
                 <Footer />
             </div>
         </div>

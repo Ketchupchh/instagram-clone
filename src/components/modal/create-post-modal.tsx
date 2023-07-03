@@ -322,7 +322,7 @@ export function CreatePostModal({
                         <div className='flex flex-col w-full'>
                             <div className='flex flex-col gap-y-6 px-5 pt-4'>
                                 <div className='flex flex-row gap-x-3'>
-                                    <UserAvatar src={user ? user?.photoURL : "/"} username={user ? user?.username : "Ketchup"} size={30}/>
+                                    <UserAvatar src={user ? user?.photoURL : "/"} username={user ? user?.username : "Ketchup"} />
                                     <UserUsername userId={user ? user.id: ""} username={user ? user.username : ""} verified={false} b/>
                                 </div>
                                 <textarea

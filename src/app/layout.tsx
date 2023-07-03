@@ -1,11 +1,10 @@
-import { MainContainer } from '@/components/layout/main-container'
 import './globals.scss'
+import { MainContainer } from '@/components/layout/main-container'
 import { AuthContextProvider } from '@/lib/context/auth-context'
 import { ThemeContextProvider } from '@/lib/context/theme-context'
 import { WindowContextProvider } from '@/lib/context/window-context'
 import { Sidebar } from '@/components/sidebar/sidebar'
-import { MobileFooter } from '@/components/sidebar/mobile-footer'
-import { MobileHeader } from '@/components/sidebar/mobile-header'
+import { MainLayout } from '@/components/layout/main-layout'
 
 export const metadata = {
   title: 'Instagram',
@@ -20,18 +19,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <AuthContextProvider>
-          <WindowContextProvider>
-            <ThemeContextProvider>
-              <MainContainer>
-                <Sidebar />
-                <MobileHeader />
-                {children}
-                <MobileFooter />
-              </MainContainer>
-            </ThemeContextProvider>
-          </WindowContextProvider>
-        </AuthContextProvider>
+        <MainLayout>
+          {children}
+        </MainLayout>
       </body>
     </html>
   )

@@ -18,7 +18,7 @@ export function UserCard(userData: UserCardProps) : JSX.Element
     return (
         <div className="w-full flex flex-row items-center gap-x-2 py-2">
             <Link className="flex flex-row gap-x-2" href={`/user/${userData.username}`}>
-                <UserAvatar src={userData.photoURL} username={userData.username} size={30} />
+                <UserAvatar src={userData.photoURL} username={userData.username} />
                 <UserUsername userId={userData.id} username={userData.username} verified={userData.verified} size="text-[13px]" badgeClassname="w-4 h-4" b />
             </Link>
             {!isOwner && <FollowButton className="text-[10px] text-[#0095f6] hover:text-white ml-auto" targetUserId={userData.id} userFollowing={user ? user.following : []} userId={user ? user.id : ""} />}

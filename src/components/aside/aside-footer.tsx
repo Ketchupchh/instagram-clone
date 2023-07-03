@@ -1,16 +1,16 @@
 import Link from "next/link";
 
 const footerLinks = [
-  ['About', 'https://twitter.com/tos'],
-  ['Help', 'https://twitter.com/privacy'],
-  ['Press', 'https://support.twitter.com/articles/20170514'],
-  ['API', 'https://help.twitter.com/resources/accessibility'],
-  ['Jobs', '/'],
-  ['Privacy', '/'],
-  ['Terms', '/'],
-  ['Locations', '/'],
-  ['Language', '/'],
-  ['Meta Verified', '/']
+  ['About', 'https://about.instagram.com'],
+  ['Help', 'https://help.instagram.com'],
+  ['Press', 'https://about.instagram.com/blog/'],
+  ['API', 'https://developers.facebook.com/docs/instagram'],
+  ['Jobs', 'https://about.instagram.com/about-us/careers'],
+  ['Privacy', 'https://privacycenter.instagram.com/policy/?entry_point=ig_help_center_data_policy_redirect'],
+  ['Terms', 'https://help.instagram.com/581066165581870/'],
+  ['Locations', 'https://www.instagram.com/explore/locations/'],
+  ['Language', '#'],
+  ['Meta Verified', 'https://about.meta.com/technologies/meta-verified/']
 ] as const;
 
 export function AsideFooter() : JSX.Element

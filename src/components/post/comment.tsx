@@ -65,7 +65,7 @@ export function PostComment(comment: CommentProps) : JSX.Element
             <div className="flex flex-row gap-x-3 items-center">
 
                 <UserTooltip postUserId={comment.createdBy} postUser={comment.user}>
-                    <UserAvatar src={comment.user.photoURL} username={comment.user.username} size={35} />
+                    <UserAvatar src={comment.user.photoURL} username={comment.user.username} />
                 </UserTooltip>
                 <UserTooltip postUserId={comment.createdBy} postUser={comment.user}>
                     <UserUsername userId={comment.createdBy} username={comment.user.username} verified={comment.user.verified} b badgeClassname="w-4 h-4" />

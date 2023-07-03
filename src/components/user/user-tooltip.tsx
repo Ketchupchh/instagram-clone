@@ -69,9 +69,16 @@ export function UserTooltip({
                         )}
                         <div className='p-3'>
                             <div className='flex flex-row gap-x-3'>
-                                <UserAvatar src={UserData ? UserData.photoURL : postUser ? postUser.photoURL : '/1'} username={UserData ? UserData.username : postUser ? postUser.username : ""} />
+                                <UserAvatar className="w-12 h-12 rounded-full overflow-hidden" src={UserData ? UserData.photoURL : postUser ? postUser.photoURL : '/1'} username={UserData ? UserData.username : postUser ? postUser.username : ""} />
                                 <div className='grid grid-rows-3 grid-cols-1'>
-                                    <UserUsername userId={UserData ? UserData.id : postUser ? postUser.userId : '1'} username={UserData ? UserData.username : postUser ? postUser.username : ""} verified={UserData ? UserData.verified : postUser ? postUser.verified : false} size='text-[15px]' b />
+                                    <UserUsername
+                                        userId={UserData ? UserData.id : postUser ? postUser.userId : '1'}
+                                        username={UserData ? UserData.username : postUser ? postUser.username : ""}
+                                        verified={UserData ? UserData.verified : postUser ? postUser.verified : false}
+                                        size='text-[15px]'
+                                        b
+                                        badgeClassname='w-4 h-4'
+                                        />
                                     <p className='text-neutral-600 text-[12px]'>{postUser ? postUser.name : ""}</p>
                                 </div>
                             </div>

@@ -3,6 +3,8 @@ import { CustomIcon } from "../ui/custom-icon";
 import { motion } from 'framer-motion'
 import { useAuth } from "@/lib/context/auth-context";
 import { useTheme } from "@/lib/context/theme-context";
+import cn from 'clsx'
+import Link from "next/link";
 
 export function MoreSettings() : JSX.Element
 {
@@ -59,7 +61,7 @@ export function MoreSettings() : JSX.Element
         <div className="relative">
             <motion.div
                 ref={dropdownRef}
-                className="absolute flex flex-col w-[15rem] xl:ml-0 xs:ml-5 bg-white dark:bg-neutral-800 shadow-lg shadow-black/30 rounded-md"
+                className={cn("absolute flex flex-col w-[15rem] xl:ml-0 xs:ml-5 bg-white dark:bg-neutral-800 shadow-lg shadow-black/30 rounded-md", !shouldShow && 'hidden')}
                 initial={{
                     opacity: 0,
                     y: 0
@@ -74,10 +76,10 @@ export function MoreSettings() : JSX.Element
             >
                 {shouldShow && (
                     <>
-                        <button className="hover-animation flex flex-row items-center dark:hover:bg-neutral-600 px-4 py-3 rounded-t-md">
+                        <Link href="/settings" className="hover-animation flex flex-row items-center dark:hover:bg-neutral-600 px-4 py-3 rounded-t-md">
                             Settings
                             <CustomIcon className="ml-auto dark:text-white text-black" iconName='Options' />
-                        </button>
+                        </Link>
                         <button className="hover-animation flex flex-row items-center dark:hover:bg-neutral-600 px-4 py-3">
                             Your activity
                             <CustomIcon className="ml-auto dark:text-white text-black" iconName='Activity' />

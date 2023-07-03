@@ -9,24 +9,24 @@ import { useParams } from 'next/navigation'
 
 export function UserDataLayout({ children }: { children: React.ReactNode }) : JSX.Element
 {
-    const { id } = useParams();
+  const { id } = useParams();
 
-    const { data, loading } = useCollection(
-      query(usersCollection, where('username', '==', id), limit(1)),
-      { allowNull: true }
-    );
+  const { data, loading } = useCollection(
+    query(usersCollection, where('username', '==', id), limit(1)),
+    { allowNull: true }
+  );
 
-    const user = data ? data[0] : null;
+  const user = data ? data[0] : null;
 
-    return (
-        <UserContextProvider value={{ user, loading }}>
-            {loading ? (
-              <Placeholder />
-            ) : (
-              <>
-                {children}
-              </>
-            )}
-        </UserContextProvider>
-    );
+  return (
+    <UserContextProvider value={{ user, loading }}>
+      {loading ? (
+        <Placeholder />
+      ) : (
+        <>
+          {children}
+        </>
+      )}
+    </UserContextProvider>
+  );
 }

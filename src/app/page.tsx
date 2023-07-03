@@ -39,13 +39,14 @@ export default function Home() {
       <div
         className={
           cn(
-            'flex flex-col gap-y-5 items-center w-[29rem]',
-            isMobile ? "mt-14" : "ml-[16rem]"
+            'flex flex-col items-center w-[29rem] mt-20 gap-y-0 xs:gap-y-5 xs:mt-6 xs:ml-[16rem]'
           )
         }
       >
-
-        <div className='flex flex-row items-center gap-x-3 px-5 mt-10 w-full h-[7rem] border rounded-lg dark:border-neutral-700 dark:bg-black'>
+        <div
+          className='flex flex-row items-center gap-x-5 px-5 w-full h-[6rem] border-b dark:bg-neutral-900
+                    dark:border-neutral-700 xs:h-[7rem] xs:rounded-lg xs:border xs:dark:bg-black'
+        >
           {followingLoading ? (
             <>
             </>
@@ -55,13 +56,16 @@ export default function Home() {
           ) : (
             <>
               {followingData.map((follower, index) => (
-                <UserAvatar key={index} src={follower.photoURL} username={follower.username} />
+                <div key={index} className='flex flex-col items-center'>
+                  <UserAvatar key={index} className=" w-14 h-14 rounded-full overflow-hidden" src={follower.photoURL} username={follower.username} />
+                  <p className='text-[12px] text-center w-14 truncate text-ellipsis'>{follower.username}</p>
+                </div>
               ))}
             </>
           )}
         </div>
 
-        <div className='flex flex-col w-full gap-y-5 mb-4'>
+        <div className='flex flex-col w-full gap-y-0 xs:gap-y-5'>
           {postLoading ? (
             <PostSkeleton />
           ) : (

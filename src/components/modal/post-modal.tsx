@@ -125,7 +125,7 @@ export function PostModal(post: PostModalProps) : JSX.Element
                     <div className="flex flex-col w-[30rem] h-full border-l border-neutral-800">
                         <div className="flex flex-row gap-x-3 p-3 border-b border-neutral-800">
                             <UserTooltip postUser={post.user} postUserId={post.createdBy}>
-                                <UserAvatar src={post.user.photoURL} username={post.user.username} size={35}/>
+                                <UserAvatar src={post.user.photoURL} username={post.user.username} />
                             </UserTooltip>
                             <UserUsername userId={post.createdBy} username={post.user.username} verified={post.user.verified} b badgeClassname="w-4 h-4" />
 
@@ -135,7 +135,7 @@ export function PostModal(post: PostModalProps) : JSX.Element
                             {post.caption && (
                                 <div className="flex flex-col mb-5">
                                     <div className="flex flex-row gap-x-3 items-center">
-                                        <UserAvatar src={post.user.photoURL} username={post.user.username} size={35} />
+                                        <UserAvatar src={post.user.photoURL} username={post.user.username} />
                                         <UserUsername userId={post.createdBy} username={post.user.username} verified={post.user.verified} b badgeClassname="w-4 h-4" />
                                         <p className="text-[12px]">{post.caption}</p>
                                     </div>
