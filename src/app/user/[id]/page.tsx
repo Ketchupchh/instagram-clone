@@ -80,8 +80,11 @@ export default function UserProfile() : JSX.Element
                                     }
                                 >
                                     {isOwner && (
-                                        <div className="flex flex-col items-center font-bold text-[12px] gap-y-3">
-                                            <button className="flex items-center justify-center w-20 h-20 rounded-full ring-1 ring-neutral-200 dark:ring-neutral-800">
+                                        <div className="flex flex-col items-center font-bold text-[12px] gap-y-3 hover:cursor-not-allowed">
+                                            <button
+                                                className="flex items-center justify-center w-20 h-20 rounded-full ring-1 ring-neutral-200 dark:ring-neutral-800 hover:cursor-not-allowed"
+                                                disabled
+                                            >
                                                 <CustomIcon className='dark:text-neutral-800 text-neutral-200' iconName='PlusIcon' />
                                             </button>
                                             New

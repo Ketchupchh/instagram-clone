@@ -18,6 +18,7 @@ import { UserTooltip } from "@/components/user/user-tooltip";
 import { UserUsername } from "@/components/user/user-username";
 import { PostSettings } from "@/components/post/post-settings";
 import { Footer } from "@/components/layout/footer";
+import { PostActions } from "@/components/post/post-actions";
 
 export default function Create() {
 
@@ -129,17 +130,30 @@ export default function Create() {
                 </>
             ) : !postData ? (
                 <>
+                    <p>Post doesn't exist or has been deleted.</p>
                 </>
             ) : (
                 <>
                     <div className="xs:hidden flex flex-col mt-20 w-full">
+                        {postData.images ? (
+                            <>
+                                <div className="relative w-full h-96">
+                                    <Image className="absolute w-full h-full" src={postData.images[0].src} alt={postData.images[0].alt} fill objectFit="contain"/>
+                                </div>
+                                <div className="flex flex-row gap-x-3 p-2">
+                                    <PostActions {...postData} />
+                                </div>
+                            </>
+                        ) : (
+                           <div className="w-full h-96 bg-neutral-700" />
+                        )}
                         <div className="flex flex-row gap-x-4 items-center w-full dark:bg-neutral-800 py-2 px-4">
                             {user ? (
                                 <>
                                     <UserAvatar className="w-8 h-8" src={user.photoURL} username={user.username} />
                                     <form className="flex flex-row gap-x-4 w-full" onSubmit={handleSubmit}>
                                         <textarea
-                                            className="w-full rounded-full h-10 dark:bg-black bg-neutral-500 outline-none border border-neutral-700 pl-5 pt-1.5"
+                                            className="w-full rounded-full h-10 dark:bg-black bg-neutral-200 outline-none border dark:border-neutral-700 border-neutral-300 pl-5 pt-1.5"
                                             placeholder="Add a comment..."
                                             rows={4}
                                             value={inputValue}

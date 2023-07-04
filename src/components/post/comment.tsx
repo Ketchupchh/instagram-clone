@@ -10,6 +10,8 @@ import { manageComment, manageCommentLike, manageReply, removeComment } from "@/
 import { useAuth } from "@/lib/context/auth-context";
 import { SetStateAction, useState } from "react";
 import type { Comment } from "@/lib/types/comment";
+import { useModal } from '@/lib/hooks/useModal';
+import { Modal } from '../modal/modal';
 
 type CommentProps = Comment & {
     setTextInput: (value: SetStateAction<string>) => void;
@@ -34,6 +36,7 @@ export function PostComment(comment: CommentProps) : JSX.Element
     );
 
     const { user } = useAuth();
+    const { open, openModal, closeModal } = useModal();
 
     const isParent = user?.id === comment.parent.parentId;
     const isOwner = user?.id === comment.createdBy;
@@ -62,6 +65,16 @@ export function PostComment(comment: CommentProps) : JSX.Element
 
     return (
         <div className="flex flex-col gap-x-3 group/comment">
+            <Modal
+                className="flex items-center justify-center w-screen h-screen"
+                modalClassName="dark:bg-neutral-800 rounded-lg"
+                open={open}
+                closeModal={closeModal}
+            >
+                <button className='py-2 px-10 text-red-700' onClick={handleRemove}>
+                    Delete
+                </button>
+            </Modal>
             <div className="flex flex-row gap-x-3 items-center">
 
                 <UserTooltip postUserId={comment.createdBy} postUser={comment.user}>
@@ -74,7 +87,7 @@ export function PostComment(comment: CommentProps) : JSX.Element
                 <p className="text-[12px]">{comment.comment}</p>
 
                 <button
-                    className="w-3 h-3 ml-auto"
+                    className="w-4 h-4 xs:w-3 xs:h-3 ml-auto"
                     onClick={manageCommentLike(
                         commentIsLiked ? "unlike" : "like",
                         user ? user.id : "1",
@@ -109,7 +122,7 @@ export function PostComment(comment: CommentProps) : JSX.Element
                 {(isOwner || isParent || isAdmin) && (
                     <button
                         className="hidden group-hover/comment:block"
-                        onClick={handleRemove}
+                        onClick={openModal}
                     >
                         <CustomIcon iconName='EllipsisIcon' />
                     </button>

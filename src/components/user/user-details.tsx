@@ -5,6 +5,7 @@ import { UserUsername } from "./user-username";
 import { CustomIcon } from "../ui/custom-icon";
 import { useAuth } from "@/lib/context/auth-context";
 import { FollowButton } from "../ui/follow-button";
+import Link from "next/link";
 
 type UserDetailsProps = User;
 
@@ -33,8 +34,10 @@ export function UserDetails(userData: UserDetailsProps) : JSX.Element
                             <div className='flex flex-row items-center gap-x-3'>
                                 {isOwner ? (
                                     <>
-                                        <button className="bg-white rounded-md text-[15px] h-8 w-28 text-black">Edit profile</button>
-                                        <button className="bg-white rounded-md text-[15px] h-8 w-28 text-black">View Archive</button>
+                                        <Link className="flex items-center justify-center bg-white rounded-md text-[15px] h-8 w-28 text-black" href="/settings">
+                                            Edit profile
+                                        </Link>
+                                        <button className="bg-white rounded-md text-[15px] h-8 w-28 text-black" disabled>View Archive</button>
                                     </>
                                 ) : (
                                     <>
@@ -68,11 +71,13 @@ export function UserDetails(userData: UserDetailsProps) : JSX.Element
                         
                         {isOwner ? (
                             <>
-                                <button className="bg-white rounded-md text-[15px] w-28 text-black">Edit profile</button>
-                                <button className="bg-white rounded-md text-[15px] w-28 -ml-12 text-black">View Archive</button>
-                                <button className="-ml-20">
+                                <Link className="flex items-center justify-center bg-white rounded-md text-[15px] w-28 text-black" href="/settings">
+                                    Edit profile
+                                </Link>
+                                <button className="bg-white rounded-md text-[15px] w-28 -ml-12 text-black hover:cursor-not-allowed" disabled>View Archive</button>
+                                <Link className="-ml-20" href="/settings">
                                     <CustomIcon iconName='Options' />
-                                </button>
+                                </Link>
                             </>
                         ) : (
                             <>

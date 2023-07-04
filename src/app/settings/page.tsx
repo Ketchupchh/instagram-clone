@@ -2,13 +2,14 @@
 
 import { UserAvatar } from "@/components/user/user-avatar";
 import { useAuth } from "@/lib/context/auth-context";
-import { ChangeEvent, useRef, useState, ClipboardEvent, useEffect } from "react";
-import type { FilesWithId, ImagesPreview } from "@/lib/types/file";
+import { ChangeEvent, useRef, useState, useEffect } from "react";
 import { getImagesData } from "@/lib/validation";
 import Image from "next/image";
-import type { EditableData, EditableUserData, User } from "@/lib/types/user";
 import { updateUserData, uploadImages } from "@/lib/firebase/utils";
 import { sleep } from "@/lib/utils";
+import { motion } from "framer-motion";
+import type { FilesWithId } from "@/lib/types/file";
+import type { EditableData, EditableUserData, User } from "@/lib/types/user";
 
 export type InputFieldProps = {
     label: string;
@@ -17,10 +18,6 @@ export type InputFieldProps = {
     inputLimit?: number;
     useTextArea?: boolean;
     errorMessage?: string;
-};
-
-type RequiredInputFieldProps = Omit<InputFieldProps, 'handleChange'> & {
-    inputId: EditableData;
 };
 
 type UserImages = Record<
@@ -36,6 +33,23 @@ type TrimmedTexts = Pick<
 export default function Settings() {
 
     const { user } = useAuth();
+
+    const [savedProfile, setSavedProfile] = useState(false);
+
+    useEffect(() => {
+        let timer: NodeJS.Timeout;
+
+        if(savedProfile)
+        {
+            timer = setTimeout(() => {
+                setSavedProfile(false);
+            }, 5000);
+        }
+
+        return () => {
+            clearTimeout(timer);
+        };
+    }, [savedProfile]);
 
     const inputFileRef = useRef<HTMLInputElement>(null);
 
@@ -144,6 +158,7 @@ export default function Settings() {
     
         cleanImage();
         setEditUserData(newUserData);
+        setSavedProfile(true);
     };
 
     const handleChange =
@@ -154,15 +169,15 @@ export default function Settings() {
       setEditUserData({ ...editUserData, [key]: value });
 
     return (
-        <div className="flex flex-row w-[60rem] h-[45rem] ml-40 border dark:border-neutral-700 dark:bg-black">
-            <div className="flex flex-col w-56 border-r dark:border-neutral-700">
+        <div className="flex flex-row w-full h-full ml-0 xs:w-[60rem] xs:h-[45rem] xs:ml-40 xs:border dark:border-neutral-700 dark:bg-black">
+            <div className="hidden xs:flex flex-col w-56 border-r dark:border-neutral-700">
                 <div className="h-56 border-b dark:border-neutral-700">
 
                 </div>
             </div>
-            <div className="flex flex-col py-6 px-11 w-full">
-                <p className="text-[23px]">Edit Profile</p>
-                <div className="flex flex-col gap-y-5 items-center w-full mt-10">
+            <div className="flex flex-col py-8 xs:py-6 xs:px-11 w-full">
+                <p className="text-[23px] px-10 xs:px-0">Edit Profile</p>
+                <div className="flex flex-col gap-y-5 xs:items-center w-full mt-5 xs:mt-10 px-4 xs:px-0">
                     {user ? (
                         <>
                             <form>
@@ -174,7 +189,7 @@ export default function Settings() {
                                     ref={inputFileRef}
                                 />
                             </form>
-                            <div className="flex flex-row gap-x-7 w-96">
+                            <div className="flex flex-row gap-x-5 xs:gap-x-7 xs:w-96">
                             
                                 {editUserData.photoURL ? (
                                     <Image className="rounded-full" src={editUserData.photoURL} alt={user.username} width={40} height={40} />
@@ -188,34 +203,34 @@ export default function Settings() {
                                     </button>
                                 </div>
                             </div>
-                            <div className="flex flex-row gap-x-7 items-center break-words mb-10">
+                            <div className="flex flex-col xs:flex-row gap-y-1 xs:gap-x-7 xs:items-center break-words mb-10">
                                 <p className="font-bold">Website</p>
                                 <div className="flex flex-col gap-y-2 relative">
                                     <input
-                                        className="bg-neutral-800 rounded-sm h-8 w-96 placeholder-neutral-600"
+                                        className="dark:bg-neutral-800 bg-neutral-200 rounded-sm h-8 xs:w-96 dark:placeholder-neutral-600 placeholder-neutral-400"
                                         placeholder="  Website"
                                         type="text"
                                         onChange={handleChange("website")}
                                     />
-                                    <p className="absolute text-[11px] w-96 mt-10 text-neutral-400">Editing your links is only available on mobile. Visit the Instagram app and edit your profile to change the websites in your bio.</p>
+                                    <p className="absolute text-[11px] xs:w-96 mt-10 text-neutral-400">Editing your links is only available on mobile. Visit the Instagram app and edit your profile to change the websites in your bio.</p>
                                 </div>
                             </div>
-                            <div className="flex flex-row gap-x-7 ml-7">
+                            <div className="flex flex-col gap-y-1 xs:flex-row xs:gap-x-7 xs:ml-7">
                                 <p className="font-bold">Bio</p>
                                 <textarea
-                                    className="bg-inherit border border-neutral-600 w-96 h-20"
+                                    className="bg-inherit border border-neutral-600 p-2 xs:w-96 h-20"
                                     onChange={!isHittingBioInputLimit ? handleChange('bio') : undefined}
                                     value={bioSlicedInputValue}
                                 />
                             </div>
-                            <div className="flex flex-row gap-x-7 w-96 -ml-[5.3rem]">
+                            <div className="flex flex-col w-full gap-y-1 xs:flex-row xs:gap-x-7 xs:w-96 xs:-ml-[5.3rem]">
                                 <p className="font-bold">Gender</p>
-                                <div className="flex flex-col">
-                                    <button className="w-96 h-8 border border-neutral-600 hover:brightness-75 text-left pl-2 hover:cursor-not-allowed" disabled >Prefer not to say</button>
+                                <div className="flex flex-col w-full">
+                                    <button className="w-full xs:w-96 h-8 border border-neutral-600 hover:brightness-75 text-left pl-2 hover:cursor-not-allowed" disabled >Prefer not to say</button>
                                 </div>
                             </div>
 
-                            <div className="ml-20 w-96">
+                            <div className="xs:ml-20 xs:w-96">
                                 <button
                                     className="flex items-center justify-center w-20 h-8 p-3 bg-[#0095f6] rounded-md text-[12px] font-bold"
                                     onClick={updateData}
@@ -225,10 +240,26 @@ export default function Settings() {
                             </div>
                         </>
                     ) : (
-                        <></>
+                        <p>Login to edit your account.</p>
                     )}
                 </div>
             </div>
+            <motion.div
+                className="fixed bottom-0 xs:hidden flex items-center px-4 w-full h-10 dark:bg-neutral-800"
+                initial={{
+                    opacity: 0,
+                    y: 100
+                }}
+                animate={{
+                    opacity: savedProfile ? 1 : 0,
+                    y: savedProfile ? -50 : 100
+                }}
+                transition={{
+                    ease: "easeOut"
+                }}
+            >
+                Profile saved.
+            </motion.div>
         </div>
     );
 }

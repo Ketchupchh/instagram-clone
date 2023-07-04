@@ -49,8 +49,34 @@ export const updatePostUserData = regionalFunctions.firestore
                 },
             })
         })
+
+        const userCommentsQuery = firestore()
+        .collection('comments')
+        .where('createdBy', '==', userId);
+
+        const commentsDocsSnap = await userCommentsQuery.get();
+
+        functions.logger.info(`Updating ${commentsDocsSnap.size} comment(s)`)
+
+        commentsDocsSnap.docs.forEach(({id, ref}) => {
+            functions.logger.info(`Updating ${id}`)
+            batch.update(ref, {
+                user: {
+                    id: userId,
+                    photoURL: userData.photoURL,
+                    username: userData.username,
+                    name: userData.name,
+                    totalPosts: userData.totalPosts,
+                    followers: userData.followers,
+                    following: userData.following,
+                    isAdmin: userData.isAdmin,
+                    verified: userData.verified,
+                    private: userData.private
+                },
+            })
+        })
         
         await batch.commit();
 
-        functions.logger.info(`Updating the userdata of ${userId} (${userData.username}) tweet's complete.`)
+        functions.logger.info(`Updating the userdata of ${userId} (${userData.username}) tweet's complete. (${userData.username}) comments's complete.`)
     })
