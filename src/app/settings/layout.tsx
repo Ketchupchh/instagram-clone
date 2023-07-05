@@ -1,11 +1,4 @@
-'use client'
-
 import { Footer } from "@/components/layout/footer"
-import { useWindow } from "@/lib/context/window-context"
-import { db } from "@/lib/firebase/firebase"
-import { User, userConverter } from "@/lib/types/user"
-import { collection, doc, getDoc, getDocs, query, where } from "firebase/firestore"
-import { ChangeEvent, useEffect, useState } from "react"
 
 export const metadata = {
   title: 'Settings * Instagram',
