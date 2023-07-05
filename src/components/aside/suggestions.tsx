@@ -47,7 +47,7 @@ export function Suggestions() : JSX.Element
                         <>
                             {user.id !== "BYmUxZqADsgz2U6hT5J2B0aeRWo1" && (
                                 <UserTooltip postUserId={user.id} UserData={user}>
-                                    <UserCard key={index} {...user} />
+                                    <UserCard key={index} {...user} followButton />
                                 </UserTooltip>
                             )}
                         </>

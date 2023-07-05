@@ -2,8 +2,9 @@ import { manageLike, manageSaved } from "@/lib/firebase/utils";
 import { CustomIcon } from "../ui/custom-icon";
 import { useAuth } from "@/lib/context/auth-context";
 import { useRouter } from "next/navigation";
-import type { Post } from "@/lib/types/post";
 import { useWindow } from "@/lib/context/window-context";
+import { motion } from "framer-motion";
+import type { Post } from "@/lib/types/post";
 
 type PostActionsProps = Post & {
     openPostModal?: () => void;
@@ -33,23 +34,29 @@ export function PostActions(post: PostActionsProps) : JSX.Element
     
     return ( 
         <>
-            <button
-                className="flex flex-row items-center gap-x-3"
+            <motion.button
+                className="flex flex-row items-center gap-x-3 hover:brightness-75"
                 onClick={manageLike(
                     postIsLiked ? "unlike" : "like",
                     user ? user.id : "1",
                     post.id
                 )}
+                whileTap={{
+                    scale: 1.3
+                }}
+                transition={{
+                    duration: 0.23
+                }}
             >
                 <CustomIcon className={postIsLiked ? "text-red-600 w-6 h-6" : "dark:text-white text-black w-6 h-6"} iconName={postIsLiked ? "SolidHeartIcon" : "HeartIcon"}  />
-            </button>
+            </motion.button>
             <button className="w-6 h-6" onClick={handleCommentClick}>
-                <CustomIcon iconName="MessageIcon" />
+                <CustomIcon className="hover:brightness-75" iconName="MessageIcon" />
             </button>
-            <button className="w-6 h-6">
+            <button className="w-6 h-6 hover:brightness-75 hover:cursor-not-allowed" disabled>
                 <CustomIcon iconName="SendToIcon" />
             </button>
-            <button className="w-6 h-6 ml-auto" onClick={handleSaved}>
+            <button className="w-6 h-6 ml-auto hover:brightness-75" onClick={handleSaved}>
                 <CustomIcon iconName={postIsSaved ? "SolidSaveIcon" : "SaveIcon"}/>
             </button>
         </>

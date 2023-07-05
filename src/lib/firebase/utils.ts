@@ -12,7 +12,8 @@ import {
   arrayUnion,
   arrayRemove,
   serverTimestamp,
-  getCountFromServer
+  getCountFromServer,
+  collection
 } from 'firebase/firestore';
 import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
 import { db, storage } from './firebase';
@@ -24,7 +25,7 @@ import {
   userSavedCollection
 } from './collections';
 import type { WithFieldValue, Query } from 'firebase/firestore';
-import type { EditableUserData } from '@/lib/types/user';
+import { userConverter, type EditableUserData, type User } from '@/lib/types/user';
 import type { Theme } from '../types/theme';
 import type { FilesWithId, ImagesPreview } from '../types/file';
 import { Saved } from '../types/saved';
@@ -286,6 +287,31 @@ export function manageCommentLike(
 
     await batch.commit();
   };
+}
+
+export async function fetchUsers(username: string): Promise<User[]>{
+
+  const q = query(
+    collection(db, 'users'),
+    where('username', '>=', username),
+    limit(10))
+    .withConverter(userConverter);
+
+  try {
+    const querySnapshot = await getDocs(q);
+
+    const fetchedUsers: User[] = [];
+    querySnapshot.forEach((doc) => {
+      const fetchedUser = doc.data() as User;
+      fetchedUsers.push(fetchedUser);
+    });
+
+    return fetchedUsers;
+
+  } catch(error)
+  {
+    return [];
+  }
 }
 
 export async function verifyUser(userId: string): Promise<void> {

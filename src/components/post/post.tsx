@@ -9,6 +9,11 @@ import { Modal } from "../modal/modal";
 import { PostModal } from "../modal/post-modal";
 import { PostSettings } from "./post-settings";
 import { PostActions } from "./post-actions";
+import { useCollection } from "@/lib/hooks/useCollection";
+import { orderBy, query, where } from "firebase/firestore";
+import { postsCollection, usersCollection } from "@/lib/firebase/collections";
+import { useArrayDocument } from "@/lib/hooks/useArrayDocument";
+import { UserCards } from "../user/user-cards";
 
 type PostProps = Post;
 
@@ -20,8 +25,37 @@ export function Post(post: PostProps) : JSX.Element
         closeModal: postCloseModal
     } = useModal();
 
+    const {
+        open: likeModalOpen,
+        openModal: likeOpenModal,
+        closeModal: likeCloseModal
+    } = useModal();
+
+    const { data, loading } = useArrayDocument(
+        post.userLikes,
+        usersCollection,
+        { disabled: !'likes' }
+    );
+
     return (
-        <div className="flex flex-col gap-x-3 w-full xs:border xs:dark:border-neutral-800 xs:rounded-xl dark:bg-black">
+        <div className="flex flex-col w-full xs:border xs:dark:border-neutral-800 xs:rounded-xl dark:bg-black items-start">
+
+            <Modal
+                className="flex items-center justify-center w-screen h-screen"
+                modalClassName="flex flex-col w-[25rem] h-[25rem] dark:bg-neutral-800 bg-white rounded-xl overflow-hidden"
+                open={likeModalOpen}
+                closeModal={likeCloseModal}
+            >
+                <UserCards
+                    type="likes"
+                    data={data}
+                    loading={loading}
+                    includeName
+                    followButton
+                    userCardButton
+                />
+            </Modal>
+
             <Modal
                 className="flex items-center justify-center w-screen h-screen"
                 modalClassName="w-[90rem] h-[55rem] dark:bg-black bg-white"
@@ -31,7 +65,7 @@ export function Post(post: PostProps) : JSX.Element
                 <PostModal {...post} closeModal={postCloseModal} />
             </Modal>
 
-            <div className="flex flex-row items-center p-3 gap-x-3">
+            <div className="flex flex-row items-center p-3 gap-x-3 w-full">
                 <UserTooltip postUser={post.user} postUserId={post.createdBy}>
                     <UserAvatar className="w-10 h-10 rounded-full overflow-hidden" src={post.user.photoURL} username={post.user.username} />
                 </UserTooltip>
@@ -47,11 +81,13 @@ export function Post(post: PostProps) : JSX.Element
                     <Image className="absolute w-full h-full" src={post.images[0].src} alt={post.images[0].alt} fill objectFit="cover" />
                 )}
             </div>
-            <div className="flex flex-row p-3 gap-x-4">
+            <div className="flex flex-row p-3 gap-x-4 w-full">
                 <PostActions {...post} openPostModal={postOpenModal} />
             </div>
             {post.userLikes.length > 0 && (
-                <p className="font-bold px-3 text-[13px]">{post.userLikes.length} {post.userLikes.length === 1 ? "like" : "likes"}</p>
+                <button className="font-bold px-3 text-[13px]" onClick={likeOpenModal}>
+                    {post.userLikes.length} {post.userLikes.length === 1 ? "like" : "likes"}
+                </button>
             )}
             <div className="px-3 flex flex-row gap-x-1 mt-1">
                 <UserUsername userId={post.createdBy} username={post.user.username} verified={false} b size="text-[13px]"/>

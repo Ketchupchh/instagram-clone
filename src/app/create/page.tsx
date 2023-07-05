@@ -8,11 +8,11 @@ import { manageTotalPhotos, manageTotalPosts, uploadImages } from "@/lib/firebas
 import { sleep } from "@/lib/utils";
 import { postsCollection } from "@/lib/firebase/collections";
 import { useRouter } from "next/navigation";
-import type { FilesWithId, ImagesPreview } from "@/lib/types/file";
-import type { Post } from "@/lib/types/post";
 import { getImagesData } from "@/lib/validation";
 import Image from "next/image";
 import { UserAvatar } from "@/components/user/user-avatar";
+import type { FilesWithId, ImagesPreview } from "@/lib/types/file";
+import type { Post } from "@/lib/types/post";
 
 const titles = [
     {

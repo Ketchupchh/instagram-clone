@@ -1,4 +1,11 @@
+'use client'
+
 import { Footer } from "@/components/layout/footer"
+import { useWindow } from "@/lib/context/window-context"
+import { db } from "@/lib/firebase/firebase"
+import { User, userConverter } from "@/lib/types/user"
+import { collection, doc, getDoc, getDocs, query, where } from "firebase/firestore"
+import { ChangeEvent, useEffect, useState } from "react"
 
 export const metadata = {
   title: 'Settings * Instagram',
@@ -10,6 +17,7 @@ export default function RootLayout({
 }: {
   children: React.ReactNode
 }) {
+
   return (
     <div className="flex flex-col w-screen xs:w-[70%] ml-0 xl:ml-20 items-center pt-5">
       <p className="invisible xs:visible mr-auto font-bold text-[25px] mb-5">Settings</p>

@@ -6,6 +6,11 @@ import { CustomIcon } from "../ui/custom-icon";
 import { useAuth } from "@/lib/context/auth-context";
 import { FollowButton } from "../ui/follow-button";
 import Link from "next/link";
+import { Modal } from "../modal/modal";
+import { UserCards } from "./user-cards";
+import { useModal } from "@/lib/hooks/useModal";
+import { usersCollection } from "@/lib/firebase/collections";
+import { useArrayDocument } from "@/lib/hooks/useArrayDocument";
 
 type UserDetailsProps = User;
 
@@ -18,8 +23,64 @@ export function UserDetails(userData: UserDetailsProps) : JSX.Element
 
     const isOwner = user?.id === userData.id;
 
+    const {
+        open: followersModalOpen,
+        openModal: followersOpenModal,
+        closeModal: followersCloseModal
+    } = useModal();
+
+    const {
+        open: followingModalOpen,
+        openModal: followingOpenModal,
+        closeModal: followingCloseModal
+    } = useModal();
+
+    const { data: followersData, loading:followersLoading } = useArrayDocument(
+        userData.followers,
+        usersCollection,
+        { disabled: !'followers' }
+    );
+
+    const { data: followingData, loading:followingLoading } = useArrayDocument(
+        userData.following,
+        usersCollection,
+        { disabled: !'following' }
+    );
+
     return (
         <>
+            <Modal
+                className="flex items-center justify-center w-screen h-screen"
+                modalClassName="flex flex-col w-[25rem] h-[25rem] dark:bg-neutral-800 bg-white rounded-xl overflow-hidden"
+                open={followersModalOpen}
+                closeModal={followersCloseModal}
+            >
+                <UserCards
+                    type="followers"
+                    data={followersData}
+                    loading={followersLoading}
+                    includeName
+                    followButton
+                    userCardButton
+                />
+            </Modal>
+
+            <Modal
+                className="flex items-center justify-center w-screen h-screen"
+                modalClassName="flex flex-col w-[25rem] h-[25rem] dark:bg-neutral-800 bg-white rounded-xl overflow-hidden"
+                open={followingModalOpen}
+                closeModal={followingCloseModal}
+            >
+                <UserCards
+                    type="following"
+                    data={followingData}
+                    loading={followingLoading}
+                    includeName
+                    followButton
+                    userCardButton
+                />
+            </Modal>
+            
             {isMobile ? (
                 <>
                     <div className="flex flex-row items-center mr-auto px-5 gap-x-7">
@@ -83,20 +144,30 @@ export function UserDetails(userData: UserDetailsProps) : JSX.Element
                             <>
                                 {user ? (
                                     <FollowButton
-                                        className="flex items-center justify-center ml-12 col-span-3 w-20 h-8 p-3 bg-[#0095f6] rounded-md text-[12px] font-bold"
-                                        textClassName="text-white"
+                                        className="col-span-3"
                                         targetUserId={userData.id}
                                         userId={user.id}
                                         userFollowing={user.following}
+                                        userCardButton
                                     />
                                 ) : (
-                                    
                                     <div className="col-span-3" />
                                 )}
                             </>
                         )}
-                        <p><b>{userData.totalPosts}</b> Posts</p> <p className="-ml-10"><b>{userData.followers.length}</b> Followers</p> <p className="col-span-2 -ml-14"><b>{userData.following.length}</b> Following</p>
-
+                        <p>
+                            <b>{userData.totalPosts}</b> Posts
+                        </p>
+                        <button className="text-left" onClick={followersOpenModal}>
+                            <b>{userData.followers.length}</b> Followers
+                        </button>
+                        <button className="text-left" onClick={followingOpenModal}>
+                            <b>{userData.following.length}</b> Following
+                        </button>
+                        
+                        {userData.name && (
+                            <p className="col-span-4 w-full font-bold">{userData.name}</p>
+                        )}
                         {userData.bio && (
                             <p className="col-span-4 w-full">{userData.bio}</p>
                         )}

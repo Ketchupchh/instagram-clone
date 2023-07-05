@@ -80,6 +80,16 @@ export default function Settings() {
     const bioInputLength = bioSlicedInputValue.length;
     const isHittingBioInputLimit = 150 && bioInputLength > 150;
 
+    const nameSlicedInputValue = editUserData.name?.slice(0, 150) ?? '';
+
+    const nameInputLength = nameSlicedInputValue.length;
+    const isHittingNameInputLimit = 30 && nameInputLength > 30;
+
+    const usernameSlicedInputValue = editUserData.username?.slice(0, 150) ?? '';
+
+    const usernameInputLength = usernameSlicedInputValue.length;
+    const isHittingUsernameInputLimit = 30 && usernameInputLength > 30;
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
     useEffect(() => cleanImage, []);
 
@@ -189,6 +199,7 @@ export default function Settings() {
                                     ref={inputFileRef}
                                 />
                             </form>
+
                             <div className="flex flex-row gap-x-5 xs:gap-x-7 xs:w-96">
                             
                                 {editUserData.photoURL ? (
@@ -202,6 +213,22 @@ export default function Settings() {
                                         Change profile photo
                                     </button>
                                 </div>
+                            </div>
+                            <div className="flex flex-col gap-y-1 xs:flex-row xs:gap-x-7 xs:-ml-4">
+                                <p className="font-bold">Username</p>
+                                <textarea
+                                    className="bg-inherit border border-neutral-600 px-2 py-1 xs:w-96 h-9 resize-none"
+                                    onChange={!isHittingUsernameInputLimit ? handleChange('username') : undefined}
+                                    value={usernameSlicedInputValue}
+                                />
+                            </div>
+                            <div className="flex flex-col gap-y-1 xs:flex-row xs:gap-x-7 xs:ml-4">
+                                <p className="font-bold">Name</p>
+                                <textarea
+                                    className="bg-inherit border border-neutral-600 px-2 py-1 xs:w-96 h-9 resize-none"
+                                    onChange={!isHittingNameInputLimit ? handleChange('name') : undefined}
+                                    value={nameSlicedInputValue}
+                                />
                             </div>
                             <div className="flex flex-col xs:flex-row gap-y-1 xs:gap-x-7 xs:items-center break-words mb-10">
                                 <p className="font-bold">Website</p>

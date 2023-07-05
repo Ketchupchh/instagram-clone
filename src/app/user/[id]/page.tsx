@@ -11,10 +11,14 @@ import { useRouter } from "next/navigation";
 import { CustomIcon } from '@/components/ui/custom-icon';
 import { useCollection } from '@/lib/hooks/useCollection';
 import { orderBy, query, where } from 'firebase/firestore';
-import { postsCollection } from '@/lib/firebase/collections';
+import { postsCollection, usersCollection } from '@/lib/firebase/collections';
 import { GalleryPost } from '@/components/post/gallery-post';
 import { UserDetails } from '@/components/user/user-details';
 import { useAuth } from '@/lib/context/auth-context';
+import { useModal } from '@/lib/hooks/useModal';
+import { useArrayDocument } from '@/lib/hooks/useArrayDocument';
+import { Modal } from '@/components/modal/modal';
+import { UserCards } from '@/components/user/user-cards';
 
 export default function UserProfile() : JSX.Element
 {
@@ -39,6 +43,32 @@ export default function UserProfile() : JSX.Element
 
     const isOwner = currUser?.id === user?.id;
     const isFollowing = currUser?.following.includes(user ? user.id : "1");
+    const followers = user ? user.followers : [];
+    const following = user ? user.following : [];
+
+    const {
+        open: followersModalOpen,
+        openModal: followersOpenModal,
+        closeModal: followersCloseModal
+    } = useModal();
+
+    const {
+        open: followingModalOpen,
+        openModal: followingOpenModal,
+        closeModal: followingCloseModal
+    } = useModal();
+
+    const { data: followersData, loading:followersLoading } = useArrayDocument(
+        followers,
+        usersCollection,
+        { disabled: !'followers' }
+    );
+
+    const { data: followingData, loading:followingLoading } = useArrayDocument(
+        following,
+        usersCollection,
+        { disabled: !'following' }
+    );
 
     return(
         <div
@@ -49,6 +79,39 @@ export default function UserProfile() : JSX.Element
                 )
             }
         >
+
+            <Modal
+                className="flex items-center justify-center w-screen h-screen"
+                modalClassName="flex flex-col w-[25rem] h-[25rem] dark:bg-neutral-800 bg-white rounded-xl overflow-hidden"
+                open={followersModalOpen}
+                closeModal={followersCloseModal}
+            >
+                <UserCards
+                    type="followers"
+                    data={followersData}
+                    loading={followersLoading}
+                    includeName
+                    followButton
+                    userCardButton
+                />
+            </Modal>
+
+            <Modal
+                className="flex items-center justify-center w-screen h-screen"
+                modalClassName="flex flex-col w-[25rem] h-[25rem] dark:bg-neutral-800 bg-white rounded-xl overflow-hidden"
+                open={followingModalOpen}
+                closeModal={followingCloseModal}
+            >
+                <UserCards
+                    type="following"
+                    data={followingData}
+                    loading={followingLoading}
+                    includeName
+                    followButton
+                    userCardButton
+                />
+            </Modal>
+
             {user ? (
                 <>
                     {user.private && !isOwner && !isFollowing ? (
@@ -97,14 +160,14 @@ export default function UserProfile() : JSX.Element
                                         <p className='font-bold'>{user.totalPosts}</p>
                                         <p className='text-[14px] dark:text-neutral-400'>{user.totalPosts > 1 ? "posts" : "post"}</p>
                                     </div>
-                                    <div className='flex flex-col items-center'>
+                                    <button className='flex flex-col items-center' onClick={followersOpenModal}>
                                         <p className='font-bold'>{user.followers.length}</p>
                                         <p className='text-[14px] dark:text-neutral-400'>{user.followers.length > 1 ? "followers" : "follower"}</p>
-                                    </div>
-                                    <div className='flex flex-col items-center'>
+                                    </button>
+                                    <button className='flex flex-col items-center' onClick={followingOpenModal}>
                                         <p className='font-bold'>{user.following.length}</p>
                                         <p className='text-[14px] dark:text-neutral-400'>following</p>
-                                    </div>
+                                    </button>
                                 </div>
 
                                 <div className="flex flex-col items-center border-b xs:border-b-0 xs:border-t dark:border-neutral-800 xs:mt-5">
@@ -123,22 +186,17 @@ export default function UserProfile() : JSX.Element
                                     )}
                                 </div>
 
-                                <div className='grid grid-cols-3 gap-5'>
-                                    {postsLoading ? (
-                                        <p className='w-full text-center'>Loading...</p>
-                                    ) : !postsData ? (
-                                        <>
-                                            <p className='w-full text-center'>User hasn't posted</p>
-                                        </>
-                                    ) : (
-                                        <>
-                                            {postsData.map((post, index) => (
-                                                <GalleryPost key={index} {...post} />
-                                            ))}
-                                        </>
-                                    )}
-                                </div>
-
+                                {postsLoading ? (
+                                    <p className='w-full text-center mt-10'>Loading...</p>
+                                ) : !postsData ? (
+                                    <p className='w-full text-center mt-10'>User hasn't posted</p>
+                                ) : (
+                                    <div className='grid grid-cols-3 gap-5'>
+                                        {postsData.map((post, index) => (
+                                            <GalleryPost key={index} {...post} />
+                                        ))}
+                                    </div>
+                                )}
                             </div>
                         </>
                     )}

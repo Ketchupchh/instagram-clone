@@ -76,27 +76,27 @@ export function MoreSettings() : JSX.Element
             >
                 {shouldShow && (
                     <>
-                        <Link href="/settings" className="hover-animation flex flex-row items-center dark:hover:bg-neutral-600 px-4 py-3 rounded-t-md">
+                        <Link href="/settings" className="hover-animation flex flex-row items-center dark:hover:bg-neutral-600 px-4 py-3 rounded-t-md border-b border-neutral-300 dark:border-b-0">
                             Settings
                             <CustomIcon className="ml-auto dark:text-white text-black" iconName='Options' />
                         </Link>
-                        <button className="hover-animation flex flex-row items-center dark:hover:bg-neutral-600 px-4 py-3">
+                        <button className="hover-animation flex flex-row items-center dark:hover:bg-neutral-600 px-4 py-3 border-b border-neutral-300 dark:border-b-0">
                             Your activity
                             <CustomIcon className="ml-auto dark:text-white text-black" iconName='Activity' />
                         </button>
-                        <button className="hover-animation flex flex-row items-center dark:hover:bg-neutral-600 px-4 py-3">
+                        <button className="hover-animation flex flex-row items-center dark:hover:bg-neutral-600 px-4 py-3 border-b border-neutral-300 dark:border-b-0">
                             Saved
                             <CustomIcon className="ml-auto dark:text-white text-black" iconName='SaveIcon' />
                         </button>
-                        <button className="hover-animation flex flex-row items-center dark:hover:bg-neutral-600 px-4 py-3" onClick={toggleTheme}>
+                        <button className="hover-animation flex flex-row items-center dark:hover:bg-neutral-600 px-4 py-3 border-b border-neutral-300 dark:border-b-0" onClick={toggleTheme}>
                             Switch appearance
                             <CustomIcon className="ml-auto dark:text-white text-black" iconName='CrescentMoon' />
                         </button>
-                        <button className="hover-animation flex flex-row items-center dark:hover:bg-neutral-600 px-4 py-3">
+                        <button className="hover-animation flex flex-row items-center dark:hover:bg-neutral-600 px-4 py-3 border-b border-neutral-300 dark:border-b-0">
                             Report a problem
                             <CustomIcon className="ml-auto dark:text-white text-black" iconName='ReportIcon' />
                         </button>
-                        <button className="hover-animation flex flex-row items-center dark:hover:bg-neutral-600 px-4 py-3">
+                        <button className="hover-animation flex flex-row items-center dark:hover:bg-neutral-600 px-4 py-3 border-b border-neutral-300 dark:border-b-0">
                             Switch accounts
                         </button>
                         <button
@@ -108,9 +108,12 @@ export function MoreSettings() : JSX.Element
                     </>
                 )}
             </motion.div>
-            <button className="relative hover-animation xl:flex xl:-ml-3 xs:justify-center xl:justify-normal font-bold
-                dark:hover:bg-neutral-600/20 rounded-full flex flex-row items-center gap-x-2
-                xs:w-10 xs:h-10 xl:w-full xl:h-full xs:ml-6 xs:p-2 xl:p-3" onClick={toggleDropdown}>
+            <button
+                className="relative hover-animation xl:flex xl:-ml-3 xs:justify-center xl:justify-normal font-bold
+                            dark:hover:bg-neutral-600/20 rounded-full flex flex-row items-center gap-x-2
+                            xs:w-10 xs:h-10 xl:w-full xl:h-full xs:ml-6 xs:p-2 xl:p-3"
+                onClick={toggleDropdown}
+            >
                 <CustomIcon iconName="Settings" />
                 <p className="xs:hidden xl:block">More</p>
             </button>
