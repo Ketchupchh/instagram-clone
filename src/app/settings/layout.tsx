@@ -15,7 +15,7 @@ export default function RootLayout({
     <div className="flex flex-col w-screen xs:w-[70%] ml-0 xl:ml-20 items-center pt-5">
       <p className="invisible xs:visible mr-auto font-bold text-[25px] mb-5">Settings</p>
       {children}
-      <div className="hidden xs:flex w-[55rem] ml-40 mt-5">
+      <div className="hidden xs:block w-[55rem] ml-40 mt-5">
         <Footer />
       </div>
     </div>

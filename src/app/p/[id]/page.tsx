@@ -19,6 +19,7 @@ import { UserUsername } from "@/components/user/user-username";
 import { PostSettings } from "@/components/post/post-settings";
 import { Footer } from "@/components/layout/footer";
 import { PostActions } from "@/components/post/post-actions";
+import { InputField } from "@/components/input/input-field";
 
 export default function Create() {
 
@@ -116,7 +117,7 @@ export default function Create() {
 
     const handleChange = ({
         target: { value }
-    }: ChangeEvent<HTMLTextAreaElement>): void => setInputValue(value);
+    }: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>): void => setInputValue(value);
 
     const handleSubmit = (e: FormEvent<HTMLFormElement>): void => {
         e.preventDefault();
@@ -152,13 +153,15 @@ export default function Create() {
                                 <>
                                     <UserAvatar className="w-8 h-8" src={user.photoURL} username={user.username} />
                                     <form className="flex flex-row gap-x-4 w-full" onSubmit={handleSubmit}>
-                                        <textarea
-                                            className="w-full rounded-full h-10 dark:bg-black bg-neutral-200 outline-none border dark:border-neutral-700 border-neutral-300 pl-5 pt-1.5"
+                                        <InputField
+                                            inputId="comment"
+                                            className="w-full rounded-full h-10 dark:bg-black bg-neutral-200 outline-none border dark:border-neutral-700 border-neutral-300 px-5 pt-1.5"
                                             placeholder="Add a comment..."
-                                            rows={4}
-                                            value={inputValue}
-                                            onChange={handleChange}
+                                            inputValue={inputValue}
+                                            handleChange={handleChange}
+                                            useTextArea
                                         />
+                                        
                                         <button>
                                             Post
                                         </button>

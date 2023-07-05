@@ -301,10 +301,7 @@ export async function fetchUsers(username: string): Promise<User[]>{
     const querySnapshot = await getDocs(q);
 
     const fetchedUsers: User[] = [];
-    querySnapshot.forEach((doc) => {
-      const fetchedUser = doc.data() as User;
-      fetchedUsers.push(fetchedUser);
-    });
+    querySnapshot.docs.map((doc) => fetchedUsers.push(doc.data() as User));
 
     return fetchedUsers;
 

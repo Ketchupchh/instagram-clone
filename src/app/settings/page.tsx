@@ -3,11 +3,13 @@
 import { UserAvatar } from "@/components/user/user-avatar";
 import { useAuth } from "@/lib/context/auth-context";
 import { ChangeEvent, useRef, useState, useEffect } from "react";
-import { getImagesData } from "@/lib/validation";
+import { getImagesData, isValidUsername } from "@/lib/validation";
 import Image from "next/image";
-import { updateUserData, uploadImages } from "@/lib/firebase/utils";
+import { checkUsernameAvailability, updateUserData, uploadImages } from "@/lib/firebase/utils";
 import { sleep } from "@/lib/utils";
 import { motion } from "framer-motion";
+import { InputField } from "@/components/input/input-field";
+import cn from 'clsx'
 import type { FilesWithId } from "@/lib/types/file";
 import type { EditableData, EditableUserData, User } from "@/lib/types/user";
 
@@ -75,21 +77,6 @@ export default function Settings() {
         username
     });
 
-    const bioSlicedInputValue = editUserData.bio?.slice(0, 150) ?? '';
-
-    const bioInputLength = bioSlicedInputValue.length;
-    const isHittingBioInputLimit = 150 && bioInputLength > 150;
-
-    const nameSlicedInputValue = editUserData.name?.slice(0, 150) ?? '';
-
-    const nameInputLength = nameSlicedInputValue.length;
-    const isHittingNameInputLimit = 30 && nameInputLength > 30;
-
-    const usernameSlicedInputValue = editUserData.username?.slice(0, 150) ?? '';
-
-    const usernameInputLength = usernameSlicedInputValue.length;
-    const isHittingUsernameInputLimit = 30 && usernameInputLength > 30;
-
     // eslint-disable-next-line react-hooks/exhaustive-deps
     useEffect(() => cleanImage, []);
 
@@ -130,8 +117,35 @@ export default function Settings() {
         });
     };
 
+    const [available, setAvailable] = useState(false);
+
+    useEffect(() => {
+        const checkAvailability = async (value: string): Promise<void> => {
+            const empty = await checkUsernameAvailability(value);
+      
+            if (empty) setAvailable(true);
+            else {
+              setAvailable(false);
+            }
+        };
+
+        const error = isValidUsername(username as string, editUserData.username);
+
+        if (error) {
+            if(error === 'This is your current username.' && editUserData.photoURL !== photoURL)
+            {
+                setAvailable(true);
+            }
+            else{
+                setAvailable(false);
+            }
+        } else void checkAvailability(editUserData.username);
+    }, [editUserData.username, username, editUserData.photoURL, photoURL])
+
     const updateData = async (): Promise<void> => {
-    
+        
+        if(!available) return;
+
         const userId = user?.id as string;
     
         const { photoURL } = userImages;
@@ -216,38 +230,49 @@ export default function Settings() {
                             </div>
                             <div className="flex flex-col gap-y-1 xs:flex-row xs:gap-x-7 xs:-ml-4">
                                 <p className="font-bold">Username</p>
-                                <textarea
+                                <InputField
                                     className="bg-inherit border border-neutral-600 px-2 py-1 xs:w-96 h-9 resize-none"
-                                    onChange={!isHittingUsernameInputLimit ? handleChange('username') : undefined}
-                                    value={usernameSlicedInputValue}
+                                    inputId="username"
+                                    placeholder="Username"
+                                    inputValue={editUserData.username}
+                                    inputLimit={20}
+                                    handleChange={handleChange('username')}
+                                    useTextArea
                                 />
                             </div>
                             <div className="flex flex-col gap-y-1 xs:flex-row xs:gap-x-7 xs:ml-4">
                                 <p className="font-bold">Name</p>
-                                <textarea
+                                <InputField
                                     className="bg-inherit border border-neutral-600 px-2 py-1 xs:w-96 h-9 resize-none"
-                                    onChange={!isHittingNameInputLimit ? handleChange('name') : undefined}
-                                    value={nameSlicedInputValue}
+                                    inputId="name"
+                                    placeholder="Name"
+                                    inputValue={editUserData.name}
+                                    handleChange={handleChange('name')}
+                                    useTextArea
                                 />
                             </div>
                             <div className="flex flex-col xs:flex-row gap-y-1 xs:gap-x-7 xs:items-center break-words mb-10">
                                 <p className="font-bold">Website</p>
                                 <div className="flex flex-col gap-y-2 relative">
-                                    <input
-                                        className="dark:bg-neutral-800 bg-neutral-200 rounded-sm h-8 xs:w-96 dark:placeholder-neutral-600 placeholder-neutral-400"
-                                        placeholder="  Website"
-                                        type="text"
-                                        onChange={handleChange("website")}
+                                    <InputField
+                                        className="dark:bg-neutral-800 bg-neutral-200 rounded-sm h-8 xs:w-96 dark:placeholder-neutral-600 placeholder-neutral-400 px-2"
+                                        inputId="Website"
+                                        placeholder="Website"
+                                        inputValue={editUserData.website}
+                                        handleChange={handleChange('website')}
                                     />
                                     <p className="absolute text-[11px] xs:w-96 mt-10 text-neutral-400">Editing your links is only available on mobile. Visit the Instagram app and edit your profile to change the websites in your bio.</p>
                                 </div>
                             </div>
                             <div className="flex flex-col gap-y-1 xs:flex-row xs:gap-x-7 xs:ml-7">
                                 <p className="font-bold">Bio</p>
-                                <textarea
+                                <InputField
                                     className="bg-inherit border border-neutral-600 p-2 xs:w-96 h-20"
-                                    onChange={!isHittingBioInputLimit ? handleChange('bio') : undefined}
-                                    value={bioSlicedInputValue}
+                                    inputId="bio"
+                                    inputValue={editUserData.bio}
+                                    inputLimit={150}
+                                    handleChange={handleChange('bio')}
+                                    useTextArea
                                 />
                             </div>
                             <div className="flex flex-col w-full gap-y-1 xs:flex-row xs:gap-x-7 xs:w-96 xs:-ml-[5.3rem]">
@@ -259,8 +284,14 @@ export default function Settings() {
 
                             <div className="xs:ml-20 xs:w-96">
                                 <button
-                                    className="flex items-center justify-center w-20 h-8 p-3 bg-[#0095f6] rounded-md text-[12px] font-bold"
+                                    className={
+                                        cn(
+                                            "flex items-center justify-center w-20 h-8 p-3 rounded-md text-[12px] font-bold",
+                                            available ? "bg-[#0095f6]" : 'bg-[#0095f6]/70'
+                                        )
+                                    }
                                     onClick={updateData}
+                                    disabled={available ? false : true}
                                 >
                                     Submit
                                 </button>

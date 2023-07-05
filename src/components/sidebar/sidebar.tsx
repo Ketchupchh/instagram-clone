@@ -13,11 +13,9 @@ import { motion } from "framer-motion";
 import { usePathname, useRouter } from 'next/navigation';
 import { ChangeEvent, useEffect, useRef, useState } from "react";
 import cn from 'clsx'
-import { type User, userConverter } from "@/lib/types/user";
-import { collection, getDocs, limit, query, where } from "firebase/firestore";
-import { db } from "@/lib/firebase/firebase";
 import { UserCard } from "../user/user-card";
 import { fetchUsers } from "@/lib/firebase/utils";
+import type { User } from "@/lib/types/user";
 
 const blacklistedRoutes = [
     "/create"

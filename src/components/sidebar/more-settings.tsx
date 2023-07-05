@@ -9,7 +9,7 @@ import Link from "next/link";
 export function MoreSettings() : JSX.Element
 {
 
-    const { signOut } = useAuth();
+    const { signInWithGoogle, signOut } = useAuth();
     const { theme, changeTheme } = useTheme();
 
     const dropdownRef = useRef<HTMLDivElement>(null);
@@ -88,7 +88,10 @@ export function MoreSettings() : JSX.Element
                             Saved
                             <CustomIcon className="ml-auto dark:text-white text-black" iconName='SaveIcon' />
                         </button>
-                        <button className="hover-animation flex flex-row items-center dark:hover:bg-neutral-600 px-4 py-3 border-b border-neutral-300 dark:border-b-0" onClick={toggleTheme}>
+                        <button
+                            className="hover-animation flex flex-row items-center dark:hover:bg-neutral-600 px-4 py-3 border-b border-neutral-300 dark:border-b-0"
+                            onClick={toggleTheme}
+                        >
                             Switch appearance
                             <CustomIcon className="ml-auto dark:text-white text-black" iconName='CrescentMoon' />
                         </button>
@@ -96,7 +99,10 @@ export function MoreSettings() : JSX.Element
                             Report a problem
                             <CustomIcon className="ml-auto dark:text-white text-black" iconName='ReportIcon' />
                         </button>
-                        <button className="hover-animation flex flex-row items-center dark:hover:bg-neutral-600 px-4 py-3 border-b border-neutral-300 dark:border-b-0">
+                        <button
+                            className="hover-animation flex flex-row items-center dark:hover:bg-neutral-600 px-4 py-3 border-b border-neutral-300 dark:border-b-0"
+                            onClick={signInWithGoogle}
+                        >
                             Switch accounts
                         </button>
                         <button

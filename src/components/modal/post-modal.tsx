@@ -15,6 +15,7 @@ import { ChangeEvent, FormEvent, useEffect, useRef, useState } from "react";
 import { PostComment } from "../post/comment";
 import type { Post } from "@/lib/types/post";
 import type { Comment } from "@/lib/types/comment";
+import { InputField } from "../input/input-field";
 
 type PostModalProps = Post & {
     closeModal: () => void;
@@ -108,7 +109,7 @@ export function PostModal(post: PostModalProps) : JSX.Element
 
     const handleChange = ({
         target: { value }
-    }: ChangeEvent<HTMLTextAreaElement>): void => setInputValue(value);
+    }: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>): void => setInputValue(value);
 
     const handleSubmit = (e: FormEvent<HTMLFormElement>): void => {
         e.preventDefault();
@@ -176,13 +177,15 @@ export function PostModal(post: PostModalProps) : JSX.Element
                         </div>
                         <div className="h-14 p-3">
                             <form className="flex flex-row gap-x-3 items-center w-full h-full" onSubmit={handleSubmit}>
-                                <textarea
+                                <InputField
                                     className='w-full h-full bg-inherit outline-none resize-none text-[13px]'
-                                    placeholder='Write a comment...'
-                                    rows={4}
-                                    value={inputValue}
-                                    onChange={handleChange}
+                                    inputId="comment"
+                                    placeholder="Write a comment"
+                                    inputValue={inputValue}
+                                    handleChange={handleChange}
+                                    useTextArea
                                 />
+                                
                                 <button className="ml-auto text-[13px] font-bold">
                                     Post
                                 </button>

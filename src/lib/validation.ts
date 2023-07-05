@@ -35,8 +35,8 @@ export function isValidUsername(
 ): string | null {
   if (value.length < 4)
     return 'Your username must be longer than 4 characters.';
-  if (value.length > 15)
-    return 'Your username must be shorter than 15 characters.';
+  if (value.length > 20)
+    return 'Your username must be shorter than 20 characters.';
   if (!/^\w+$/i.test(value))
     return "Your username can only contain letters, numbers and '_'.";
   if (!/[a-z]/i.test(value)) return 'Include a non-number character.';

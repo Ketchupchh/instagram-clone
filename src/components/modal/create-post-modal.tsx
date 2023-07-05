@@ -13,6 +13,7 @@ import { Post } from '@/lib/types/post';
 import { sleep } from '@/lib/utils';
 import { manageTotalPhotos, manageTotalPosts, uploadImages } from '@/lib/firebase/utils';
 import { postsCollection } from '@/lib/firebase/collections';
+import { InputField } from '../input/input-field';
 
 type CreatePostModalProps = {
     closeModal: () => void;
@@ -177,7 +178,7 @@ export function CreatePostModal({
 
     const handleChange = ({
         target: { value }
-    }: ChangeEvent<HTMLTextAreaElement>): void => setInputValue(value);
+    }: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>): void => setInputValue(value);
 
     const handleSubmit = (e: FormEvent<HTMLFormElement>): void => {
         e.preventDefault();
@@ -311,19 +312,23 @@ export function CreatePostModal({
                                     <UserAvatar src={user ? user?.photoURL : "/"} username={user ? user?.username : "Ketchup"} />
                                     <UserUsername userId={user ? user.id: ""} username={user ? user.username : ""} verified={false} b/>
                                 </div>
-                                <textarea
-                                    className='bg-inherit outline-none resize-none'
-                                    placeholder='Write a caption...'
-                                    rows={7}
-                                    value={inputValue}
-                                    onChange={handleChange}
+                                
+                                <InputField
+                                    className='bg-inherit outline-none resize-none h-40'
+                                    inputId='caption'
+                                    inputValue={inputValue}
+                                    inputLimit={2200}
+                                    handleChange={handleChange}
+                                    useTextArea
+                                    hideInputLimit
                                 />
                                 <div className='flex flex-row items-center'>
                                     <button>
                                         <CustomIcon iconName='EmojiIcon' />
                                     </button>
-                                    <p className=' ml-auto text-neutral-500 text-[12px]'>0/2,200</p>
+                                    <p className=' ml-auto text-neutral-500 text-[12px]'>{inputValue.length} / {2200}</p>
                                 </div>
+
                                 <div className='flex flex-row items-center'>
                                     <input
                                         className='bg-inherit outline-none w-full'
@@ -332,12 +337,14 @@ export function CreatePostModal({
                                     />
                                     <CustomIcon iconName='ArrowDownIcon' />
                                 </div>
+
                                 <div className='flex flex-row items-center'>
                                     <button className='hover:cursor-not-allowed' disabled>
                                         Accessibility
                                     </button>
                                     <CustomIcon className='ml-auto h-6 w-6' iconName='ArrowDownIcon' />
                                 </div>
+                                
                                 <div className='flex flex-row items-center'>
                                     <button className='hover:cursor-not-allowed' disabled>
                                         Advanced Settings
