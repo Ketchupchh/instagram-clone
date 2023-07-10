@@ -144,10 +144,10 @@ export function Sidebar() : JSX.Element
                         className="fixed w-[29rem] left-0 min-h-screen hidden xs:block z-10 dark:bg-black bg-white rounded-r-xl border-r
                                 dark:border-neutral-800 pl-[4.2rem]"
                         initial={{
-                            x: -220
+                            x: -240
                         }}
                         animate={{
-                            x: searchOpen ? 6 : -220
+                            x: searchOpen ? 6 : -400
                         }}
                         transition={{
                             ease: "easeIn"
@@ -166,7 +166,7 @@ export function Sidebar() : JSX.Element
                                 <p className="font-bold text-[23px] mt-6">Search</p>
 
                                 <input
-                                    className="outline-none dark:bg-neutral-800 bg-neutral-400 h-10 rounded-md px-3"
+                                    className="outline-none dark:bg-neutral-800 bg-neutral-200/50 h-10 rounded-md px-3"
                                     placeholder="Search"
                                     type="search"
                                     value={inputValue}
@@ -249,11 +249,11 @@ export function Sidebar() : JSX.Element
                                 cn(
                                     `hover-animation xl:-ml-3 xs:justify-center xl:justify-normal xs:w-10 xs:h-10
                                     xs:ml-3 xs:p-2 xl:p-3 flex flex-row items-center gap-x-5 font-bold
-                                    xs:dark:hover:bg-neutral-600/20 rounded-full`,
+                                    xs:dark:hover:bg-neutral-600/20 rounded-full hover:cursor-not-allowed`,
                                     searchOpen ? "xl:w-12 xl:h-12" : "xl:w-full xl:h-full"
                                 )
                             }
-                            href="/explore"
+                            href="#"
                         >
                             <motion.div
                                 whileHover={{
@@ -270,11 +270,11 @@ export function Sidebar() : JSX.Element
                                 cn(
                                     `hover-animation xl:-ml-3 xs:justify-center xl:justify-normal xs:w-10 xs:h-10
                                     xs:ml-3 xs:p-2 xl:p-3 flex flex-row items-center gap-x-5 font-bold
-                                    xs:dark:hover:bg-neutral-600/20 rounded-full`,
+                                    xs:dark:hover:bg-neutral-600/20 rounded-full hover:cursor-not-allowed`,
                                     searchOpen ? "xl:w-12 xl:h-12" : "xl:w-full xl:h-full"
                                 )
                             }
-                            href="/reels"
+                            href="#"
                         >
                             <motion.div
                                 whileHover={{
@@ -310,12 +310,13 @@ export function Sidebar() : JSX.Element
                         <button
                             className={
                                 cn(
-                                    `hidden hover-animation xl:-ml-3 xs:justify-center xl:justify-normal xs:w-10 xs:h-10xs:ml-3
+                                    `hidden hover-animation xl:-ml-3 xs:justify-center xl:justify-normal xs:w-10 xs:h-10 xs:ml-3
                                     xs:p-2 xl:p-3 xs:flex flex-row items-center gap-x-5 font-bold xs:dark:hover:bg-neutral-600/20
-                                    rounded-full text-left`,
+                                    rounded-full text-left hover:cursor-not-allowed`,
                                     searchOpen ? "xl:w-12 xl:h-12" : "xl:w-full xl:h-full"
                                 )
                             }
+                            disabled
                         >
                             <motion.div
                                 whileHover={{

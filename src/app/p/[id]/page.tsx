@@ -209,13 +209,13 @@ export default function Create() {
                     
                     <div className="hidden xs:flex flex-row w-[50rem] h-[40rem] mt-10 border dark:border-neutral-700">
                         {postData.images && (
-                            <div className="relative w-[60%] border-r border-neutral-700">
+                            <div className="relative w-[60%] border-r dark:border-neutral-700">
                                 <Image className="w-full h-full" src={postData.images[0].src} alt={postData.images[0].alt} fill objectFit="contain"/>
                             </div>
                         )}
 
                         <div className="flex flex-col w-[40%] dark:bg-black bg-white">
-                            <div className="flex flex-row gap-x-3 p-3 border-b border-neutral-800">
+                            <div className="flex flex-row gap-x-3 p-3 border-b dark:border-neutral-800">
                                 <UserTooltip postUser={postData.user} postUserId={postData.createdBy}>
                                     <UserAvatar src={postData.user.photoURL} username={postData.user.username} />
                                 </UserTooltip>

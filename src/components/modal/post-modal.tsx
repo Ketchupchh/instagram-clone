@@ -123,8 +123,8 @@ export function PostModal(post: PostModalProps) : JSX.Element
                     <div className="relative hidden xs:block xs:w-[60rem] h-full">
                         <Image className="w-full h-full" src={post.images[0].src} alt={post.images[0].alt} fill objectFit="contain"/>
                     </div>
-                    <div className="flex flex-col w-full xs:w-[30rem] h-full border-l border-neutral-800">
-                        <div className="flex flex-row gap-x-3 p-3 border-b border-neutral-800">
+                    <div className="flex flex-col w-full xs:w-[30rem] h-full border-l dark:border-neutral-800">
+                        <div className="flex flex-row gap-x-3 p-3 border-b dark:border-neutral-800">
                             <UserTooltip postUser={post.user} postUserId={post.createdBy}>
                                 <UserAvatar src={post.user.photoURL} username={post.user.username} />
                             </UserTooltip>
@@ -172,7 +172,7 @@ export function PostModal(post: PostModalProps) : JSX.Element
                                 </div>
                             )}
                         </div>
-                        <div className="flex flex-row gap-x-3 p-3 border-t border-b border-neutral-800">
+                        <div className="flex flex-row gap-x-3 p-3 border-t border-b dark:border-neutral-800">
                             <PostActions {...post} />
                         </div>
                         <div className="h-14 p-3">

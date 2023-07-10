@@ -1,9 +1,7 @@
 import { ChangeEvent, ClipboardEvent, FormEvent, useId, useRef, useState } from "react";
 import { getImagesData } from "@/lib/validation";
 import { useAuth } from "@/lib/context/auth-context";
-import Image from "next/image";
 import type { FilesWithId, ImageData, ImagesPreview } from "@/lib/types/file";
-
 
 export function Input() : JSX.Element
 {
@@ -61,13 +59,6 @@ export function Input() : JSX.Element
     setImagesPreview([]);
   };
 
-  const discardTweet = (): void => {
-    setInputValue('');
-    cleanImage();
-
-    inputRef.current?.blur();
-  };
-
   const handleChange = ({
     target: { value }
   }: ChangeEvent<HTMLTextAreaElement>): void => setInputValue(value);
@@ -85,7 +76,7 @@ export function Input() : JSX.Element
   const isValidInput = !!inputValue.trim().length;
   const isCharLimitExceeded = inputLength > inputLimit;
 
-  const isValidTweet =
+  const isValidPost =
   !isCharLimitExceeded && (isValidInput || isUploadingImages);
 
   const inputFileRef = useRef<HTMLInputElement>(null);
@@ -93,27 +84,18 @@ export function Input() : JSX.Element
   const onClick = (): void => inputFileRef.current?.click();
 
   return (
-    <>
-      {user && (
-        <form onSubmit={handleSubmit}>
-          <input
-            className='hidden'
-            type='file'
-            accept='image/*'
-            onChange={handleImageUpload}
-            ref={inputFileRef}
-            multiple
-          />
-
-          <button onClick={onClick}>
-            add photo
-          </button>
-
-          {imagesPreview.length > 0 && (
-            <Image src={imagesPreview[0].src} alt="s" width={500} height={100} />
-          )}
-        </form>
-      )}
-    </>
+    <form
+      className="hidden" onSubmit={handleSubmit}
+      id={formId}
+    >
+      <input
+        className='hidden'
+        type='file'
+        accept='image/*'
+        onChange={handleImageUpload}
+        ref={inputFileRef}
+        multiple
+      />
+    </form>
   );
 }

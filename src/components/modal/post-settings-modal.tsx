@@ -38,7 +38,7 @@ export function PostSettingsModal(post: PostSettingsModalProps) : JSX.Element
                             <button className="w-full p-3 text-[#ED4956]" onClick={handleRemove}>
                                 Delete
                             </button>
-                            <button className="w-full p-3 border-t border-neutral-700 text-[#ED4956] hover:cursor-not-allowed" disabled>
+                            <button className="w-full p-3 border-t dark:border-neutral-700 text-[#ED4956] hover:cursor-not-allowed" disabled>
                                 Report
                             </button>
                         </>
@@ -47,10 +47,10 @@ export function PostSettingsModal(post: PostSettingsModalProps) : JSX.Element
                             Report
                         </button>
                     )}
-                    <button className="w-full p-3 border-t border-neutral-700" onClick={handleFollow}>
+                    <button className="w-full p-3 border-t dark:border-neutral-700" onClick={handleFollow}>
                         <p className={isFollowing ? "text-[#ED4956]" : "dark:text-white text-black"}>{isFollowing ? "Unfollow" : "Follow"}</p>
                     </button>
-                    <button className="w-full p-3 border-t border-neutral-700">
+                    <button className="w-full p-3 border-t dark:border-neutral-700">
                         Add to favorites
                     </button>
                 </>
@@ -59,36 +59,36 @@ export function PostSettingsModal(post: PostSettingsModalProps) : JSX.Element
                     <button className="w-full p-3 text-[#ED4956]" onClick={handleRemove}>
                         Delete
                     </button>
-                    <button className="w-full p-3 border-t border-neutral-700 hover:cursor-not-allowed" disabled>
+                    <button className="w-full p-3 border-t dark:border-neutral-700 hover:cursor-not-allowed" disabled>
                         Edit
                     </button>
-                    <button className="w-full p-3 border-t border-neutral-700 hover:cursor-not-allowed" disabled>
+                    <button className="w-full p-3 border-t dark:border-neutral-700 hover:cursor-not-allowed" disabled>
                         Turn off commenting
                     </button>
                 </>
             )}
-            <button className="w-full p-3 border-t border-neutral-700">
+            <button className="w-full p-3 border-t dark:border-neutral-700">
                 Go to post
             </button>
             {!isOwner ? (
                 <>
-                    <button className="w-full p-3 border-t border-neutral-700 hover:cursor-not-allowed" disabled>
+                    <button className="w-full p-3 border-t dark:border-neutral-700 hover:cursor-not-allowed" disabled>
                         Share to...
                     </button>
-                    <button className="w-full p-3 border-t border-neutral-700">
+                    <button className="w-full p-3 border-t dark:border-neutral-700">
                         Copy link
                     </button>
-                    <button className="w-full p-3 border-t border-neutral-700 hover:cursor-not-allowed" disabled>
+                    <button className="w-full p-3 border-t dark:border-neutral-700 hover:cursor-not-allowed" disabled>
                         Embed
                     </button>
                 </>
             ) : (
                 <></>
             )}
-            <button className="w-full p-3 border-t border-neutral-700 hover:cursor-not-allowed" disabled>
+            <button className="w-full p-3 border-t dark:border-neutral-700 hover:cursor-not-allowed" disabled>
                 About this account
             </button>
-            <button className="w-full p-3 border-t border-neutral-700" onClick={post.closeModal}>
+            <button className="w-full p-3 border-t dark:border-neutral-700" onClick={post.closeModal}>
                 Cancel
             </button>
         </div>

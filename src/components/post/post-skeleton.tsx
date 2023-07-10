@@ -3,7 +3,7 @@
 export function PostSkeleton() : JSX.Element
 {
     return (
-        <div className="flex flex-col gap-x-3 w-full border dark:border-neutral-800 rounded-xl dark:bg-black">
+        <div className="flex flex-col gap-x-3 w-full border dark:border-neutral-800 xs:rounded-none xl:rounded-xl dark:bg-black">
             <div className="flex flex-row items-center p-3 gap-x-3">
                 <div className="w-10 h-10 rounded-full bg-neutral-800" />
                 <div className="flex flex-col gap-y-2">
