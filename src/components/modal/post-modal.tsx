@@ -13,9 +13,11 @@ import { sleep } from "@/lib/utils";
 import { Timestamp, WithFieldValue, addDoc, serverTimestamp } from "firebase/firestore";
 import { ChangeEvent, FormEvent, useEffect, useRef, useState } from "react";
 import { PostComment } from "../post/comment";
+import { InputField } from "../input/input-field";
+import { CustomIcon } from "../ui/custom-icon";
+import cn from 'clsx'
 import type { Post } from "@/lib/types/post";
 import type { Comment } from "@/lib/types/comment";
-import { InputField } from "../input/input-field";
 
 type PostModalProps = Post & {
     closeModal: () => void;
@@ -23,6 +25,10 @@ type PostModalProps = Post & {
 
 export function PostModal(post: PostModalProps) : JSX.Element
 {
+
+    const [imageLoading, setImageLoading] = useState(true);
+
+    const handleLoad = (): void => setImageLoading(false);
 
     const { data: repliesData, loading: repliesLoading } = useCollection(
         query(
@@ -121,7 +127,19 @@ export function PostModal(post: PostModalProps) : JSX.Element
             {post.images && (
                 <>
                     <div className="relative hidden xs:block xs:w-[60rem] h-full">
-                        <Image className="w-full h-full" src={post.images[0].src} alt={post.images[0].alt} fill objectFit="contain"/>
+                        <Image
+                            className={
+                                cn(
+                                    "w-full h-full",
+                                    imageLoading && "animate-pulse bg-neutral-700"
+                                )
+                            }
+                            src={post.images[0].src}
+                            alt={post.images[0].alt}
+                            fill
+                            objectFit="contain"
+                            onLoadingComplete={handleLoad}
+                        />
                     </div>
                     <div className="flex flex-col w-full xs:w-[30rem] h-full border-l dark:border-neutral-800">
                         <div className="flex flex-row gap-x-3 p-3 border-b dark:border-neutral-800">
@@ -144,9 +162,7 @@ export function PostModal(post: PostModalProps) : JSX.Element
                             )}
 
                             {repliesLoading ? (
-                                <>
-                                    <p>Loading...</p>
-                                </>
+                                <CustomIcon className='loading w-full h-6' iconName='LoadingIcon' />
                             ) : !repliesData ? (
                                 <>
                                     {!post.caption && (

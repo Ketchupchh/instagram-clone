@@ -1,4 +1,5 @@
 import { UserDataLayout } from '@/components/layout/user-data-layout';
+import { UserHomeLayout } from '@/components/layout/user-home-layout';
 
 export const metadata = {
   title: 'Instagram',
@@ -12,7 +13,9 @@ export default function UserLayout({
 }) {
   return (
     <UserDataLayout>
-      {children}
+      <UserHomeLayout>
+        {children}
+      </UserHomeLayout>
     </UserDataLayout>
   );
 }

@@ -6,10 +6,10 @@
 
 @layer base {
   :root {
-    --main-background: var(--dark-background);
+    --main-background: var(--light-background);
 
-    --dark-background: 18 18 18;
-    --black-background: 0 0 0;
+    --dark-background-old: 18 18 18; //old ig color
+    --dark-background: 0 0 0;
     --light-background: 255 255 255;
   }
 
@@ -21,12 +21,26 @@
   }
   
   body {
-    @apply hover-animation dark:bg-black bg-white xs:dark:bg-main-background xs:bg-main-background font-roboto text-light-primary dark:text-dark-primary;
+    @apply hover-animation bg-main-background font-roboto text-light-primary dark:text-dark-primary;
   }
 
   @layer components {
     .hover-animation {
       @apply transition-colors duration-200;
+    }
+  }
+}
+
+
+.loading {
+  animation: spin 2s linear infinite;
+
+  @keyframes spin {
+    0% {
+      transform: rotate(0);
+    }
+    100% {
+      transform: rotate(360deg);
     }
   }
 }

@@ -142,7 +142,7 @@ export function PostComment(comment: CommentProps) : JSX.Element
                             {seeReplies && (
                                 <div className="ml-10">
                                     {repliesLoading ? (
-                                        <p>Loading...</p>
+                                        <CustomIcon className='loading w-6 h-6' iconName='LoadingIcon' />
                                     ) : (
                                         <>
                                             {repliesData && (

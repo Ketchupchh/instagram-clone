@@ -12,7 +12,8 @@ import { postsCollection, usersCollection } from '@/lib/firebase/collections';
 import { Post } from '@/components/post/post';
 import { PostSkeleton } from '@/components/post/post-skeleton';
 import { useCollection } from '@/lib/hooks/useCollection';
-import { useWindow } from '@/lib/context/window-context';
+import { CheckBadgeIcon } from '@heroicons/react/24/solid';
+import { CustomIcon } from '@/components/ui/custom-icon';
 
 export default function Home() {
 
@@ -47,17 +48,19 @@ export default function Home() {
                     dark:border-neutral-700 xs:h-[7rem] xs:rounded-lg xs:border xs:dark:bg-black'
         >
           {followingLoading ? (
-            <>
-            </>
+            <CustomIcon className='loading w-full h-6' iconName='LoadingIcon' />
           ) : !followingData ? (
             <>
             </>
           ) : (
             <>
-              {followingData.map((follower, index) => (
+              {followingData.map((following, index) => (
                 <div key={index} className='flex flex-col items-center'>
-                  <UserAvatar key={index} className=" w-14 h-14 rounded-full overflow-hidden" src={follower.photoURL} username={follower.username} />
-                  <p className='text-[12px] text-center w-14 truncate text-ellipsis'>{follower.username}</p>
+                  <UserAvatar key={index} className=" w-14 h-14 rounded-full overflow-hidden" src={following.photoURL} username={following.username} />
+                  <div className='flex flex-row items-center'>
+                    <p className='text-[12px] text-center w-14 truncate text-ellipsis'>{following.username}</p>
+                    {following.verified && <CheckBadgeIcon className='w-4 h-4 text-[#3797f0]' />}
+                  </div>
                 </div>
               ))}
             </>
@@ -96,7 +99,7 @@ export default function Home() {
           {user ? (
             <>
               <UserAvatar className='w-14 h-14' src={user.photoURL} username={user.username} />
-              <UserUsername username={user.username} userId={user.id} verified={user.verified} b size='text-[15px]'/>
+              <UserUsername username={user.username} userId={user.id} verified={user.verified} b size='text-[15px]' badgeClassname='w-[20px] h-[20px]'/>
               <button className='ml-auto text-[#0095f6] text-[12px]' onClick={signInWithGoogle}>
                 Switch
               </button>

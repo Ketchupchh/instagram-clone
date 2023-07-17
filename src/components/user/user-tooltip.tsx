@@ -12,6 +12,7 @@ import { FollowButton } from '../ui/follow-button';
 import { useAuth } from '@/lib/context/auth-context';
 import type { PostUserData } from '@/lib/types/post';
 import type { User } from '@/lib/types/user';
+import { CustomIcon } from '../ui/custom-icon';
 
 type UserTooltipProps = {
     className?: string;
@@ -90,7 +91,7 @@ export function UserTooltip({
                         </div>
                         <div className='flex flex-row w-full'>
                             {postsLoading ? (
-                                <></>
+                                <CustomIcon className='loading w-full h-6' iconName='LoadingIcon' />
                             ) : (
                                 <>
                                     {postsData && (

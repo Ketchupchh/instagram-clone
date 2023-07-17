@@ -6,6 +6,7 @@ import { doc, documentId, limit, orderBy, query, where } from "firebase/firestor
 import Link from "next/link";
 import { UserCard } from "../user/user-card";
 import { UserTooltip } from "../user/user-tooltip";
+import { CustomIcon } from "../ui/custom-icon";
 
 
 export function Suggestions() : JSX.Element
@@ -35,7 +36,7 @@ export function Suggestions() : JSX.Element
                 <Link className="ml-auto text-[12px] font-bold" href={`/explore/people`}>See All</Link>
             </div>
             {suggestionsLoading || ketchupLoading ? (
-                <p>Loading...</p>
+                <CustomIcon className='loading w-full h-6 mt-5' iconName='LoadingIcon' />
             ) : suggestionsData ? (
                 <>
                     {ketchupData && (

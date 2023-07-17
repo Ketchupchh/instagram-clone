@@ -12,6 +12,7 @@ import { InputField } from "@/components/input/input-field";
 import cn from 'clsx'
 import type { FilesWithId } from "@/lib/types/file";
 import type { EditableData, EditableUserData, User } from "@/lib/types/user";
+import { CustomIcon } from "@/components/ui/custom-icon";
 
 export type InputFieldProps = {
     label: string;
@@ -140,7 +141,28 @@ export default function Settings() {
                 setAvailable(false);
             }
         } else void checkAvailability(editUserData.username);
-    }, [editUserData.username, username, editUserData.photoURL, photoURL])
+        
+        if (editUserData.username   === username    &&
+            editUserData.photoURL   !== photoURL    ||
+            editUserData.name       !== name        ||
+            editUserData.bio        !== bio         ||
+            editUserData.website    !== website
+        )
+        {
+            setAvailable(true);
+        }
+    }, [
+        editUserData.photoURL,
+        editUserData.username,
+        editUserData.name,
+        editUserData.bio,
+        editUserData.website,
+        photoURL,
+        username,
+        name,
+        bio,
+        website
+    ]);
 
     const updateData = async (): Promise<void> => {
         
@@ -293,7 +315,11 @@ export default function Settings() {
                                     onClick={updateData}
                                     disabled={available ? false : true}
                                 >
-                                    Submit
+                                    {savedProfile ? (
+                                        <CustomIcon className='loading w-full h-6' iconName='LoadingIcon' />
+                                    ) : (
+                                        "Submit"
+                                    )}
                                 </button>
                             </div>
                         </>

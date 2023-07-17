@@ -20,6 +20,7 @@ import { PostSettings } from "@/components/post/post-settings";
 import { Footer } from "@/components/layout/footer";
 import { PostActions } from "@/components/post/post-actions";
 import { InputField } from "@/components/input/input-field";
+import { CustomIcon } from "@/components/ui/custom-icon";
 
 export default function Create() {
 
@@ -176,9 +177,7 @@ export default function Create() {
                         
                         <div className="p-5">
                             {repliesLoading ? (
-                                <>
-                                    <p>Loading...</p>
-                                </>
+                                <CustomIcon className='loading w-6 h-6' iconName='LoadingIcon' />
                             ) : !repliesData ? (
                                 <>
                                     {!postData.caption && (
@@ -235,9 +234,7 @@ export default function Create() {
                                 )}
 
                                 {repliesLoading ? (
-                                    <>
-                                        <p>Loading...</p>
-                                    </>
+                                    <CustomIcon className='loading w-6 h-6' iconName='LoadingIcon' />
                                 ) : !repliesData ? (
                                     <>
                                         {!postData.caption && (

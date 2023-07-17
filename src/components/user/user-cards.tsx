@@ -1,5 +1,6 @@
 import { User } from "@/lib/types/user";
 import { UserCard } from "./user-card";
+import { CustomIcon } from "../ui/custom-icon";
 
 type UserCardsProps = {
     type: string;
@@ -28,7 +29,7 @@ export function UserCards({
                 {type}
             </p>
             {loading ? (
-                <p>Loading...</p>
+                <CustomIcon className='loading w-6 h-6' iconName='LoadingIcon' />
             ) : !data ? (
                 <>
                 </>

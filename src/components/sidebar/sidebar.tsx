@@ -175,7 +175,7 @@ export function Sidebar() : JSX.Element
                             </div>
                             <div className="flex flex-col w-full h-full px-5">
                                 {searchLoading ? (
-                                    <p>Loading...</p>
+                                    <CustomIcon className='loading w-full h-6 mt-5' iconName='LoadingIcon' />
                                 ) : (
                                     <>
                                         {users.map((u, index) => (
@@ -191,10 +191,10 @@ export function Sidebar() : JSX.Element
                     <div
                         className={
                             cn(
-                                    `fixed bottom-0 min-h-[50px] w-full justify-around flex-row p-1 flex border-t dark:border-neutral-800
-                                    dark:bg-black bg-white xs:border-r xs:flex-col xs:gap-y-2 xs:p-0 xl:p-6 xs:pt-10 xl:w-[15.3rem]
-                                    xs:left-0 xs:w-[4rem] xs:min-h-screen xs:border-t-0 z-10`,
-                                    searchOpen && "!w-[4.6rem] !border-0"
+                                `fixed bottom-0 min-h-[50px] w-full justify-around flex-row p-1 flex border-t dark:border-neutral-800
+                                dark:bg-black bg-white xs:border-r xs:flex-col xs:gap-y-2 xs:p-0 xl:p-6 xs:pt-10 xl:w-[15.3rem]
+                                xs:left-0 xs:w-[4rem] xs:min-h-screen xs:border-t-0 z-10`,
+                                searchOpen && "!w-[4.6rem] !border-0"
                             )
                         }
                     >

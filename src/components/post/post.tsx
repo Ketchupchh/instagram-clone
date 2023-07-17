@@ -9,16 +9,20 @@ import { Modal } from "../modal/modal";
 import { PostModal } from "../modal/post-modal";
 import { PostSettings } from "./post-settings";
 import { PostActions } from "./post-actions";
-import { useCollection } from "@/lib/hooks/useCollection";
-import { orderBy, query, where } from "firebase/firestore";
-import { postsCollection, usersCollection } from "@/lib/firebase/collections";
+import { usersCollection } from "@/lib/firebase/collections";
 import { useArrayDocument } from "@/lib/hooks/useArrayDocument";
 import { UserCards } from "../user/user-cards";
+import { useState } from "react";
+import cn from 'clsx'
 
 type PostProps = Post;
 
 export function Post(post: PostProps) : JSX.Element
 {
+    const [imageLoading, setImageLoading] = useState(true);
+
+    const handleLoad = (): void => setImageLoading(false);
+
     const {
         open: postModalOpen,
         openModal: postOpenModal,
@@ -78,7 +82,19 @@ export function Post(post: PostProps) : JSX.Element
             
             <div className="relative w-full h-96 bg-neutral-800">
                 {post.images && (
-                    <Image className="absolute w-full h-full" src={post.images[0].src} alt={post.images[0].alt} fill objectFit="cover" />
+                    <Image
+                        className={
+                            cn(
+                                "absolute w-full h-full",
+                                imageLoading && "animate-pulse bg-neutral-700"
+                            )
+                        }
+                        src={post.images[0].src}
+                        alt={post.images[0].alt}
+                        fill
+                        objectFit="cover"
+                        onLoadingComplete={handleLoad}
+                    />
                 )}
             </div>
             <div className="flex flex-row p-3 gap-x-4 w-full">

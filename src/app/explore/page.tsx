@@ -4,6 +4,7 @@ import { ChangeEvent, useEffect, useState } from "react";
 import type { User } from "@/lib/types/user";
 import { fetchUsers } from "@/lib/firebase/utils";
 import { UserCard } from "@/components/user/user-card";
+import { CustomIcon } from "@/components/ui/custom-icon";
 
 
 export default function Explore() {
@@ -55,7 +56,7 @@ export default function Explore() {
                 />
 
                 {searchLoading ? (
-                    <p>Loading...</p>
+                    <CustomIcon className='loading w-full h-6 mt-5' iconName='LoadingIcon' />
                 ) : (
                     <>
                         {users.map((user, index) => (

@@ -95,10 +95,20 @@ export function UserDetails(userData: UserDetailsProps) : JSX.Element
                             <div className='flex flex-row items-center gap-x-3'>
                                 {isOwner ? (
                                     <>
-                                        <Link className="flex items-center justify-center bg-white rounded-md text-[15px] h-8 w-28 text-black" href="/settings">
+                                        <Link
+                                            className="flex items-center justify-center bg-black/5 hover:bg-black/10 dark:bg-[#363636]
+                                                    dark:hover:bg-[#282828] rounded-md text-[15px] h-8 w-28 text-black dark:text-white"
+                                            href="/settings"
+                                        >
                                             Edit profile
                                         </Link>
-                                        <button className="bg-white rounded-md text-[15px] h-8 w-28 text-black" disabled>View Archive</button>
+                                        <button
+                                            className="bg-black/5 hover:bg-black/10 dark:bg-[#363636] dark:hover:bg-[#282828] rounded-md
+                                                        text-[15px] h-8 w-28 text-black dark:text-white"
+                                            disabled
+                                        >
+                                            View Archive
+                                        </button>
                                     </>
                                 ) : (
                                     <>
@@ -132,10 +142,10 @@ export function UserDetails(userData: UserDetailsProps) : JSX.Element
                         
                         {isOwner ? (
                             <>
-                                <Link className="flex items-center justify-center bg-white rounded-md text-[15px] w-28 text-black" href="/settings">
+                                <Link className="flex items-center justify-center bg-black/5 hover:bg-black/10 dark:bg-[#363636] dark:hover:bg-[#282828] rounded-md text-[15px] w-28 dark:text-white text-black py-1" href="/settings">
                                     Edit profile
                                 </Link>
-                                <button className="bg-white rounded-md text-[15px] w-28 -ml-12 text-black hover:cursor-not-allowed" disabled>View Archive</button>
+                                <button className="bg-black/5 hover:bg-black/10 dark:bg-[#363636] dark:hover:bg-[#282828] rounded-md text-[15px] w-28 -ml-12 dark:text-white text-black py-1 hover:cursor-not-allowed" disabled>View Archive</button>
                                 <Link className="-ml-20" href="/settings">
                                     <CustomIcon iconName='Options' />
                                 </Link>

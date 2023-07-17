@@ -1,5 +1,7 @@
+import cn from 'clsx'
 import Image from "next/image";
 import Link from "next/link";
+import { useState } from "react";
 
 type UserAvatarProps = {
     className?: string;
@@ -13,10 +15,27 @@ export function UserAvatar({
     username,
 } : UserAvatarProps) : JSX.Element
 {
+
+    const [loading, setLoading] = useState(true);
+
+    const handleLoad = (): void => setLoading(false);
+
     return (
         <Link href={`/user/${username}`}>
             <div className={className}>
-                <Image className="rounded-full w-full h-full" src={src} alt="user" width={100} height={100}/>
+                <Image
+                    className={
+                        cn(
+                            "rounded-full w-full h-full",
+                            loading && "animate-pulse bg-neutral-700"
+                        )
+                    }
+                    src={src}
+                    alt={username}
+                    width={100}
+                    height={100}
+                    onLoadingComplete={handleLoad}
+                />
             </div>
         </Link>
     );

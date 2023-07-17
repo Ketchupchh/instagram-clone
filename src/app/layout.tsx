@@ -1,9 +1,5 @@
 import './globals.scss'
-import { MainContainer } from '@/components/layout/main-container'
-import { AuthContextProvider } from '@/lib/context/auth-context'
-import { ThemeContextProvider } from '@/lib/context/theme-context'
-import { WindowContextProvider } from '@/lib/context/window-context'
-import { Sidebar } from '@/components/sidebar/sidebar'
+
 import { MainLayout } from '@/components/layout/main-layout'
 
 export const metadata = {
