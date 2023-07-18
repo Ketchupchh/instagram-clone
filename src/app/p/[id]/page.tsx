@@ -21,12 +21,14 @@ import { Footer } from "@/components/layout/footer";
 import { PostActions } from "@/components/post/post-actions";
 import { InputField } from "@/components/input/input-field";
 import { CustomIcon } from "@/components/ui/custom-icon";
+import { PostCarousel } from "@/components/post/post-carousel";
 
 export default function Create() {
 
-    const { id } = useParams();
-
+    const { id } = useParams()
     const { user, signInWithGoogle } = useAuth();
+
+    const [index, setIndex] = useState(0);
 
     const { data: postData, loading: postLoading } = useDocument(
         doc(postsCollection, id as string),
@@ -140,10 +142,10 @@ export default function Create() {
                         {postData.images ? (
                             <>
                                 <div className="relative w-full h-96">
-                                    <Image className="absolute w-full h-full" src={postData.images[0].src} alt={postData.images[0].alt} fill objectFit="contain"/>
+                                    <PostCarousel postId={postData.id} images={postData.images} setIndex={setIndex} pagination />
                                 </div>
                                 <div className="flex flex-row gap-x-3 p-2">
-                                    <PostActions {...postData} />
+                                    <PostActions {...postData} index={index} setIndex={setIndex} pagination />
                                 </div>
                             </>
                         ) : (
@@ -209,7 +211,12 @@ export default function Create() {
                     <div className="hidden xs:flex flex-row w-[50rem] h-[40rem] mt-10 border dark:border-neutral-700">
                         {postData.images && (
                             <div className="relative w-[60%] border-r dark:border-neutral-700">
-                                <Image className="w-full h-full" src={postData.images[0].src} alt={postData.images[0].alt} fill objectFit="contain"/>
+                                <PostCarousel
+                                    postId={postData.id}
+                                    pagClassName="absolute bottom-5 left-64 z-10"
+                                    images={postData.images}
+                                    pagination
+                                />
                             </div>
                         )}
 

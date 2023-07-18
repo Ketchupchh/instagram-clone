@@ -11,8 +11,13 @@ import { useRouter } from "next/navigation";
 import { getImagesData } from "@/lib/validation";
 import Image from "next/image";
 import { UserAvatar } from "@/components/user/user-avatar";
-import type { FilesWithId, ImagesPreview } from "@/lib/types/file";
+import { motion } from "framer-motion";
+import { NextImage } from "@/components/ui/next-image";
+import { XMarkIcon } from "@heroicons/react/24/solid";
+import cn from 'clsx'
+import type { FilesWithId, ImageData, ImagesPreview } from "@/lib/types/file";
 import type { Post } from "@/lib/types/post";
+import { PostCarousel } from "@/components/post/post-carousel";
 
 const titles = [
     {
@@ -148,6 +153,17 @@ export default function Create() {
         inputRef.current?.focus();
     };
 
+    const removeImage = (targetId: string) => (): void => {
+        setSelectedImages(selectedImages.filter(({ id }) => id !== targetId));
+        setImagesPreview(imagesPreview.filter(({ id }) => id !== targetId));
+
+        const { src } = imagesPreview.find(
+          ({ id }) => id === targetId
+        ) as ImageData;
+
+        URL.revokeObjectURL(src);
+    };
+
     const handleChange = ({
         target: { value }
     }: ChangeEvent<HTMLTextAreaElement>): void => setInputValue(value);
@@ -161,6 +177,45 @@ export default function Create() {
 
     const onClick = (): void => inputFileRef.current?.click();
 
+    const dropdownRef = useRef<HTMLDivElement>(null);
+    const [isOpen, setIsOpen] = useState(false);
+    const [shouldShow, setShouldShow] = useState(false);
+
+    useEffect(() => {
+        const handleOutsideClick = (event: MouseEvent) => {
+            if (
+                dropdownRef.current &&
+                !dropdownRef.current.contains(event.target as Node)
+            ) {
+                setIsOpen(false);
+            }
+        };
+    
+        document.addEventListener('mousedown', handleOutsideClick);
+    
+        return () => {
+          document.removeEventListener('mousedown', handleOutsideClick);
+        };
+    }, []);
+
+    useEffect(() => {
+        let timer: NodeJS.Timeout;
+    
+        if (!isOpen) {
+            timer = setTimeout(() => {
+                setShouldShow(false);
+            }, 200);
+        } else setShouldShow(true)
+    
+        return () => {
+          clearTimeout(timer);
+        };
+    }, [isOpen]);
+
+    const toggleDropdown = () => {
+        setIsOpen(!isOpen); // Toggle the dropdown state
+    };
+
     return (
         <div className="xs:hidden flex flex-col w-full h-full dark:bg-neutral-900">
             <div className="flex flex-row items-center justify-between w-full dark:bg-black bg-white border-b dark:border-neutral-800 p-5">
@@ -168,9 +223,14 @@ export default function Create() {
                     <CustomIcon iconName='LeftArrowIcon' />
                 </button>
                 <p>{titles[titleIndex].title}</p>
-                <button onClick={nextTitleIndex}>
-                    {titleIndex < 2 ? "Next" : "Share"}
-                </button>
+
+                {imagesPreview.length >= 1 ? (
+                    <button className="text-[#0095F6]" onClick={nextTitleIndex}>
+                        {titleIndex < 2 ? "Next" : "Share"}
+                    </button>
+                ) : (
+                    <div />
+                )}
             </div>
 
             <form className="hidden" onSubmit={handleSubmit}>
@@ -183,20 +243,80 @@ export default function Create() {
                     multiple
                 />
             </form>
-
+            
             {imagesPreview.length === 0 && (
-                <button onClick={onClick}>
-                    Upload image
-                </button>
+                <div className="flex justify-center mt-5">
+                    <button className="text-[13px] font-bold bg-[#0095f6] rounded-xl p-2" onClick={onClick}>
+                        Upload image
+                    </button>
+                </div>
             )}
 
             {imagesPreview.length > 0 && titleIndex < 2 && (
                 <div className="w-full h-80">
                     <div className='w-full h-full relative'>
-                        <Image className="w-full h-full" src={imagesPreview[0].src} alt={imagesPreview[0].alt} fill objectFit='contain' />
+                        <PostCarousel images={imagesPreview} />
                     </div>
+
+                    <motion.div
+                        ref={dropdownRef}
+                        className={
+                            cn(
+                                `absolute bottom-0 right-5 z-10 h-24 p-3 bg-neutral-700/80 rounded-lg
+                                flex flex-row gap-x-3 items-start justify-center`,
+                                !shouldShow && 'hidden'
+                            )
+                        }
+                        initial={{
+                            opacity: 0,
+                            y: 0
+                        }}
+                        animate={{
+                            opacity: isOpen ? 1 : 0,
+                            y: isOpen ? -90 : -10,
+                        }}
+                        transition={{
+                            duration: isOpen ? 0 : 0.2
+                        }}
+                    >
+                        {imagesPreview.map(({id, src, alt}) => (
+                            <div key={id} className='w-20 h-full relative'>
+                                <NextImage
+                                    key={id}
+                                    className="relative h-full w-full"
+                                    useSkeleton
+                                    src={src}
+                                    alt={alt}
+                                    layout='fill'
+                                />
+
+                                <button
+                                    className='absolute top-1 right-1 w-5 h-5 bg-black/50 rounded-full'
+                                    onClick={removeImage(id)}
+                                >
+                                    <XMarkIcon />
+                                </button>
+                            </div>
+                        ))}
+
+                        <button
+                            className='flex justify-center items-center w-12 h-12 ring-1 ring-neutral-500 rounded-full'
+                            onClick={onClick}
+                        >
+                            <CustomIcon iconName='PlusIcon' />
+                        </button>
+                    </motion.div>
+
+                    <button
+                        className='absolute bottom-5 right-4 z-10 group flex items-center justify-center w-10 h-10 bg-neutral-700 rounded-full
+                                    shadow-md shadow-black/40'
+                        onClick={toggleDropdown}
+                    >
+                        <CustomIcon className='w-4 h-4 group-hover:brightness-75' iconName='GalleryStack' />
+                    </button>
                 </div>
             )}
+
             {imagesPreview.length > 0 && titleIndex === 2 && (
                 <div className="flex flex-col gap-y-3 w-full">
                     <div className="flex flex-row justify-between gap-x-3 w-full border-b dark:border-neutral-800 dark:bg-black bg-white p-3">

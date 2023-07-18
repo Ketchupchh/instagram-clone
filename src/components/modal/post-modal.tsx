@@ -18,6 +18,7 @@ import { CustomIcon } from "../ui/custom-icon";
 import cn from 'clsx'
 import type { Post } from "@/lib/types/post";
 import type { Comment } from "@/lib/types/comment";
+import { PostCarousel } from "../post/post-carousel";
 
 type PostModalProps = Post & {
     closeModal: () => void;
@@ -127,19 +128,7 @@ export function PostModal(post: PostModalProps) : JSX.Element
             {post.images && (
                 <>
                     <div className="relative hidden xs:block xs:w-[60rem] h-full">
-                        <Image
-                            className={
-                                cn(
-                                    "w-full h-full",
-                                    imageLoading && "animate-pulse bg-neutral-700"
-                                )
-                            }
-                            src={post.images[0].src}
-                            alt={post.images[0].alt}
-                            fill
-                            objectFit="contain"
-                            onLoadingComplete={handleLoad}
-                        />
+                        <PostCarousel postId={post.id} images={post.images} pagination />
                     </div>
                     <div className="flex flex-col w-full xs:w-[30rem] h-full border-l dark:border-neutral-800">
                         <div className="flex flex-row gap-x-3 p-3 border-b dark:border-neutral-800">

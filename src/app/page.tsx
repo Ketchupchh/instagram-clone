@@ -39,13 +39,13 @@ export default function Home() {
       <div
         className={
           cn(
-            'flex flex-col items-center w-[29rem] mt-20 gap-y-0 xs:gap-y-5 xs:mt-6 xs:ml-[16rem]'
+            'flex flex-col items-center w-[29rem] xs:w-[39rem] mt-20 gap-y-0 xs:gap-y-5 xs:mt-6 xs:ml-[16rem] overflow-hidden'
           )
         }
       >
         <div
-          className='flex flex-row items-center gap-x-5 px-5 w-full h-[6rem] border-b dark:bg-neutral-900
-                    dark:border-neutral-700 xs:h-[7rem] xs:rounded-lg xs:border xs:dark:bg-black'
+          className='flex flex-row items-center gap-x-5 px-5 w-full h-[6rem] xs:h-[7rem] xs:dark:bg-black
+                    dark:bg-neutral-900 border-b dark:border-neutral-700 xs:border-none'
         >
           {followingLoading ? (
             <CustomIcon className='loading w-full h-6' iconName='LoadingIcon' />
@@ -67,7 +67,7 @@ export default function Home() {
           )}
         </div>
 
-        <div className='flex flex-col w-full gap-y-0 xs:gap-y-5'>
+        <div className='flex flex-col w-full xs:w-[29rem] gap-y-0 xs:gap-y-5'>
           {postLoading ? (
             <PostSkeleton />
           ) : (

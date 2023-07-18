@@ -1,6 +1,6 @@
 import cn from 'clsx'
 import { motion } from 'framer-motion';
-import { ChangeEvent, ClipboardEvent, FormEvent, useId, useRef, useState } from "react";
+import { ChangeEvent, ClipboardEvent, FormEvent, useEffect, useId, useRef, useState } from "react";
 import { getImagesData } from "@/lib/validation";
 import { useAuth } from "@/lib/context/auth-context";
 import Image from "next/image";
@@ -14,6 +14,9 @@ import { sleep } from '@/lib/utils';
 import { manageTotalPhotos, manageTotalPosts, uploadImages } from '@/lib/firebase/utils';
 import { postsCollection } from '@/lib/firebase/collections';
 import { InputField } from '../input/input-field';
+import { PostCarousel } from '../post/post-carousel';
+import { NextImage } from '../ui/next-image';
+import { XMarkIcon } from '@heroicons/react/24/solid';
 
 type CreatePostModalProps = {
     closeModal: () => void;
@@ -21,16 +24,16 @@ type CreatePostModalProps = {
 
 const titles = [
     {
-      title: "Create new post"
+        title: "Create new post"
     },
     {
-      title: "Crop"
+        title: "Crop"
     },
     {
         title: "Edit"
     },
     {
-      title: "Create new post"
+        title: "Create new post"
     },
 ];
 
@@ -153,7 +156,8 @@ export function CreatePostModal({
         setImagesPreview([...imagesPreview, ...imagesPreviewData]);
         setSelectedImages([...selectedImages, ...selectedImagesData]);
 
-        nextTitleIndex();
+        if(titleIndex === 0)
+            nextTitleIndex();
 
         inputRef.current?.focus();
     };
@@ -185,12 +189,6 @@ export function CreatePostModal({
         void sendPost();
     };
 
-    const inputLimit = user?.isAdmin ? 560 : 280;
-
-    const inputLength = inputValue.length;
-    //const isValidInput = !!inputValue.trim().length;
-    //const isCharLimitExceeded = inputLength > inputLimit;
-
     const inputFileRef = useRef<HTMLInputElement>(null);
 
     const onClick = (): void => inputFileRef.current?.click();
@@ -204,6 +202,45 @@ export function CreatePostModal({
     {
         prevTitleIndex();
     }
+
+    const dropdownRef = useRef<HTMLDivElement>(null);
+    const [isOpen, setIsOpen] = useState(false);
+    const [shouldShow, setShouldShow] = useState(false);
+
+    useEffect(() => {
+        const handleOutsideClick = (event: MouseEvent) => {
+            if (
+                dropdownRef.current &&
+                !dropdownRef.current.contains(event.target as Node)
+            ) {
+                setIsOpen(false);
+            }
+        };
+    
+        document.addEventListener('mousedown', handleOutsideClick);
+    
+        return () => {
+          document.removeEventListener('mousedown', handleOutsideClick);
+        };
+    }, []);
+
+    useEffect(() => {
+        let timer: NodeJS.Timeout;
+    
+        if (!isOpen) {
+            timer = setTimeout(() => {
+                setShouldShow(false);
+            }, 200);
+        } else setShouldShow(true)
+    
+        return () => {
+          clearTimeout(timer);
+        };
+    }, [isOpen]);
+
+    const toggleDropdown = () => {
+        setIsOpen(!isOpen); // Toggle the dropdown state
+    };
 
     return (
         <motion.div
@@ -236,7 +273,6 @@ export function CreatePostModal({
                 </div>
             </div>
             <div className='flex flex-row w-full h-full rounded-b-xl overflow-hidden'>
-
                 <div
                     className={
                         cn(
@@ -245,29 +281,88 @@ export function CreatePostModal({
                         )
                     }
                 >
-                    <div className="flex flex-col items-center justify-center w-full h-full rounded-bl-xl">
+                    {user && (
+                        <form onSubmit={handleSubmit}>
+                            <input
+                                className='hidden'
+                                type='file'
+                                accept='image/*'
+                                onChange={handleImageUpload}
+                                ref={inputFileRef}
+                                multiple
+                            />
+                        </form>
+                    )}
+                    <div className="flex flex-col items-center justify-center w-[45rem] h-full rounded-bl-xl">
                         {selectedImages.length <= 0 && (
                             <>
                                 <CustomIcon iconName='ImageAndVideoIcon' />
                                 <p className="text-xl mb-5">Drag photos and videos here</p>
                                 <button className="text-[13px] font-bold bg-[#0095f6] rounded-xl p-2" onClick={onClick}>Select from computer</button>
-                                {user && (
-                                    <form onSubmit={handleSubmit}>
-                                        <input
-                                            className='hidden'
-                                            type='file'
-                                            accept='image/*'
-                                            onChange={handleImageUpload}
-                                            ref={inputFileRef}
-                                            multiple
-                                        />
-                                    </form>
-                                )}
                             </>
                         )}
                         {imagesPreview.length > 0 && (
-                            <div className='w-full h-full relative'>
-                                <Image className="w-full h-full" src={imagesPreview[0].src} alt={imagesPreview[0].alt} fill objectFit='contain' />
+                            <div className='w-full h-full relative'> 
+                                <PostCarousel
+                                    images={imagesPreview}
+                                />
+
+                                <motion.div
+                                    ref={dropdownRef}
+                                    className={
+                                        cn(
+                                            `absolute bottom-0 right-5 z-10 h-24 p-3 bg-neutral-700/80 rounded-lg
+                                            flex flex-row gap-x-3 items-start justify-center`,
+                                            !shouldShow && 'hidden'
+                                        )
+                                    }
+                                    initial={{
+                                        opacity: 0,
+                                        y: 0
+                                    }}
+                                    animate={{
+                                        opacity: isOpen ? 1 : 0,
+                                        y: isOpen ? -90 : -10,
+                                    }}
+                                    transition={{
+                                        duration: isOpen ? 0 : 0.2
+                                    }}
+                                >
+                                    {imagesPreview.map(({id, src, alt}) => (
+                                        <div key={id} className='w-20 h-full relative'>
+                                            <NextImage
+                                                key={id}
+                                                className="relative h-full w-full"
+                                                useSkeleton
+                                                src={src}
+                                                alt={alt}
+                                                layout='fill'
+                                            />
+
+                                            <button
+                                                className='absolute top-1 right-1 w-5 h-5 bg-black/50 rounded-full'
+                                                onClick={removeImage(id)}
+                                            >
+                                                <XMarkIcon />
+                                            </button>
+                                        </div>
+                                    ))}
+
+                                    <button
+                                        className='flex justify-center items-center w-12 h-12 ring-1 ring-neutral-500 rounded-full'
+                                        onClick={onClick}
+                                    >
+                                        <CustomIcon iconName='PlusIcon' />
+                                    </button>
+                                </motion.div>
+
+                                <button
+                                    className='absolute bottom-5 right-4 z-10 group flex items-center justify-center w-10 h-10 bg-neutral-700 rounded-full
+                                                shadow-md shadow-black/40'
+                                    onClick={toggleDropdown}
+                                >
+                                    <CustomIcon className='w-4 h-4 group-hover:brightness-75' iconName='GalleryStack' />
+                                </button>
                             </div>
                         )}
                     </div>

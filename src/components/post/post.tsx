@@ -3,7 +3,6 @@ import { UserAvatar } from "../user/user-avatar";
 import { UserUsername } from "../user/user-username";
 import Link from "next/link";
 import { UserTooltip } from "../user/user-tooltip";
-import Image from "next/image";
 import { useModal } from "@/lib/hooks/useModal";
 import { Modal } from "../modal/modal";
 import { PostModal } from "../modal/post-modal";
@@ -13,15 +12,14 @@ import { usersCollection } from "@/lib/firebase/collections";
 import { useArrayDocument } from "@/lib/hooks/useArrayDocument";
 import { UserCards } from "../user/user-cards";
 import { useState } from "react";
-import cn from 'clsx'
+import { PostCarousel } from "./post-carousel";
+import { manageLike } from "@/lib/firebase/utils";
 
 type PostProps = Post;
 
 export function Post(post: PostProps) : JSX.Element
 {
-    const [imageLoading, setImageLoading] = useState(true);
-
-    const handleLoad = (): void => setImageLoading(false);
+    const [index, setIndex] = useState(0);
 
     const {
         open: postModalOpen,
@@ -80,25 +78,17 @@ export function Post(post: PostProps) : JSX.Element
                 <PostSettings className="ml-auto" {...post} />
             </div>
             
-            <div className="relative w-full h-96 bg-neutral-800">
+            <div className="relative w-full h-96 bg-neutral-800 overflow-hidden">
                 {post.images && (
-                    <Image
-                        className={
-                            cn(
-                                "absolute w-full h-full",
-                                imageLoading && "animate-pulse bg-neutral-700"
-                            )
-                        }
-                        src={post.images[0].src}
-                        alt={post.images[0].alt}
-                        fill
-                        objectFit="cover"
-                        onLoadingComplete={handleLoad}
+                    <PostCarousel
+                        postId={post.id}
+                        images={post.images}
+                        setIndex={setIndex}
                     />
                 )}
             </div>
             <div className="flex flex-row p-3 gap-x-4 w-full">
-                <PostActions {...post} openPostModal={postOpenModal} />
+                <PostActions {...post} openPostModal={postOpenModal} setIndex={setIndex} index={index} pagination />
             </div>
             {post.userLikes.length > 0 && (
                 <button className="font-bold px-3 text-[13px]" onClick={likeOpenModal}>
